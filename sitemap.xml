@@ -2,55 +2,60 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://okulusdev.github.io/tags/assembly/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
-  </url><url>
-    <loc>https://okulusdev.github.io/categories/assembly/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
-  </url><url>
-    <loc>https://okulusdev.github.io/categories/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
-  </url><url>
     <loc>https://okulusdev.github.io/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:14:54+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/post/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:14:54+07:00</lastmod>
+  </url><url>
+    <loc>https://okulusdev.github.io/post/putsf-review/</loc>
+    <lastmod>2023-11-03T19:14:54+07:00</lastmod>
+  </url><url>
+    <loc>https://okulusdev.github.io/tags/assembly/</loc>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
+  </url><url>
+    <loc>https://okulusdev.github.io/categories/assembly/</loc>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
+  </url><url>
+    <loc>https://okulusdev.github.io/categories/</loc>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/tags/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/tags/%D0%B0%D1%81%D1%81%D0%B5%D0%BC%D0%B1%D0%BB%D0%B5%D1%80/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/tags/%D0%BA%D0%BE%D0%BC%D0%BF%D1%8C%D1%8E%D1%82%D0%B5%D1%80/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/tags/%D0%BD%D0%B8%D0%B7%D0%BA%D0%BE%D1%83%D1%80%D0%BE%D0%B2%D0%BD%D0%B5%D0%B2%D0%BE%D0%B5-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/post/whats_assembly/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/categories/%D1%87%D1%82%D0%BE%D1%8D%D1%82%D0%BE/</loc>
-    <lastmod>2023-11-03T19:10:25+07:00</lastmod>
+    <lastmod>2023-11-03T19:10:59+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/categories/linux/</loc>
-    <lastmod>2023-11-03T19:06:04+07:00</lastmod>
+    <lastmod>2023-11-03T19:07:45+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/post/assembly_basic/</loc>
-    <lastmod>2023-11-03T19:06:04+07:00</lastmod>
+    <lastmod>2023-11-03T19:07:45+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/categories/coding/</loc>
-    <lastmod>2023-11-03T19:05:15+07:00</lastmod>
+    <lastmod>2023-11-03T19:07:45+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/tags/debug/</loc>
-    <lastmod>2023-11-03T19:05:15+07:00</lastmod>
+    <lastmod>2023-11-03T19:07:45+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/categories/debug/</loc>
-    <lastmod>2023-11-03T19:05:15+07:00</lastmod>
+    <lastmod>2023-11-03T19:07:45+07:00</lastmod>
   </url><url>
     <loc>https://okulusdev.github.io/post/write_debug_asm_code/</loc>
-    <lastmod>2023-11-03T19:05:15+07:00</lastmod>
+    <lastmod>2023-11-03T19:07:45+07:00</lastmod>
+  </url><url>
+    <loc>https://okulusdev.github.io/series/</loc>
   </url>
 </urlset>
