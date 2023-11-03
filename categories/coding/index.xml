@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>coding on Okulus Dev</title>
+    <link>https://okulusdev.github.io/categories/coding/</link>
+    <description>Recent content in coding on Okulus Dev</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <lastBuildDate>Fri, 03 Nov 2023 19:05:15 +0700</lastBuildDate><atom:link href="https://okulusdev.github.io/categories/coding/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Отладка и программирование на ассемблере</title>
+      <link>https://okulusdev.github.io/post/write_debug_asm_code/</link>
+      <pubDate>Fri, 03 Nov 2023 19:05:15 +0700</pubDate>
+      
+      <guid>https://okulusdev.github.io/post/write_debug_asm_code/</guid>
+      <description>Написание и отладка кода на ассемблере x86/x64 в Linux В продолжение поста об языке ассемблера на моем другом сайте я предлагаю вам прочитать эту статью. Если вы не знаете, что такое ассемблер, то советую сначала прочитать ту статью.
+Отмечу, что в рамках поста мы сосредоточимся на вопросе компиляции и отладки программ на ассемблере. Сам же язык ассемблера заслуживает отдельного большого поста, а то и серии постов.
+Если вы знаете ассемблер, то любая программа для вас — open source.</description>
+    </item>
+    
+  </channel>
+</rss>

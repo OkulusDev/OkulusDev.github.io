@@ -1,0 +1,373 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang='ru'><head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href='https://okulusdev.github.io/favicon.ico' type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Отладка и программирование на ассемблере - Okulus Dev</title>
+
+    
+
+    
+
+    
+    <meta name="author" content="Okulus Dev" />
+    
+
+    
+        <meta property="og:title" content="Отладка и программирование на ассемблере" />
+<meta property="og:description" content="Написание и отладка кода на ассемблере x86/x64 в Linux В продолжение поста об языке ассемблера на моем другом сайте я предлагаю вам прочитать эту статью. Если вы не знаете, что такое ассемблер, то советую сначала прочитать ту статью.
+Отмечу, что в рамках поста мы сосредоточимся на вопросе компиляции и отладки программ на ассемблере. Сам же язык ассемблера заслуживает отдельного большого поста, а то и серии постов.
+Если вы знаете ассемблер, то любая программа для вас — open source." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://okulusdev.github.io/post/write_debug_asm_code/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-11-03T19:05:15+07:00" />
+<meta property="article:modified_time" content="2023-11-03T19:05:15+07:00" />
+
+    
+
+    
+        <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Отладка и программирование на ассемблере"/>
+<meta name="twitter:description" content="Написание и отладка кода на ассемблере x86/x64 в Linux В продолжение поста об языке ассемблера на моем другом сайте я предлагаю вам прочитать эту статью. Если вы не знаете, что такое ассемблер, то советую сначала прочитать ту статью.
+Отмечу, что в рамках поста мы сосредоточимся на вопросе компиляции и отладки программ на ассемблере. Сам же язык ассемблера заслуживает отдельного большого поста, а то и серии постов.
+Если вы знаете ассемблер, то любая программа для вас — open source."/>
+
+    <link rel="stylesheet" href="/style.min.fae245b6ce34259555eab2b011d31eb69cfeb04f46398e9c82df62439ad6edea66fa04d14a95b4bbf3ce9679be82b4badfed247f9962c2af62f53d0f389b424f.css" integrity="sha512-&#43;uJFts40JZVV6rKwEdMetpz&#43;sE9GOY6cgt9iQ5rW7epm&#43;gTRSpW0u/POlnm&#43;grS63&#43;0kf5liwq9i9T0POJtCTw==">
+
+
+
+
+
+    
+    <script>
+        if (!('theme' in localStorage)) {
+            localStorage.theme = 'dark';
+        }
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    </script>
+<script defer src="/js/header.ef6a12cbb6ff661b899d830d9eb30134ede25fc9c26aaddecec6089c686d2e45a0bf73fa531eb2aba666bfa46699790ecc7cfee38ebc17a00ccaeffd2155eea0.js" integrity="sha512-72oSy7b/ZhuJnYMNnrMBNO3iX8nCaq3ezsYInGhtLkWgv3P6Ux6yq6Zmv6RmmXkOzHz&#43;4468F6AMyu/9IVXuoA=="></script>
+
+
+
+    <script defer src="/js/zooming.684b5d075bf94d0adfa21a7e7eb9acec1ddfb2e7b47d6657981617f0db0cf50949f1172801595afa3051f51b28d67f6a2d0c41be677b59b564307d9dbe4a4fd2.js" integrity="sha512-aEtdB1v5TQrfohp&#43;frms7B3fsue0fWZXmBYX8NsM9QlJ8RcoAVla&#43;jBR9Rso1n9qLQxBvmd7WbVkMH2dvkpP0g=="></script>
+
+
+
+
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer src="/js/math.d7efde37b2eb8879651e1f4489bcd4d8203b8c2bf8ca12c9e1b8cd11bfd6395b172f4999fff43ce0d047889a2bdb71ee74aebbae5327590192d1144e790fcd7b.js" integrity="sha512-1&#43;/eN7LriHllHh9EibzU2CA7jCv4yhLJ4bjNEb/WOVsXL0mZ//Q84NBHiJor23HudK67rlMnWQGS0RROeQ/New=="></script>
+
+
+
+
+    
+        
+        
+            <script defer src="/js/builtin-copy.56e07a74dd440b068ab36af35542ed8960865686c19fb809f38436877ac081570612cc8a913650b0c0e3073a336680c5df960e73bf7b1de83dc6aa996f2db858.js" integrity="sha512-VuB6dN1ECwaKs2rzVULtiWCGVobBn7gJ84Q2h3rAgVcGEsyKkTZQsMDjBzozZoDF35YOc797Heg9xqqZby24WA=="></script>
+        
+    
+
+
+
+    
+    
+    
+    <script defer src="/js/search-ru.918a3fb96c6477c149454fef13293a2f51fed535ccbd2998800e7c4748512f4f23a2ef947cab8c098900a93d5bd56c2397ab640276e46fd6364661cef4d020ce.js" integrity="sha512-kYo/uWxkd8FJRU/vEyk6L1H&#43;1TXMvSmYgA58R0hRL08jou&#43;UfKuMCYkAqT1b1Wwjl6tkAnbkb9Y2RmHO9NAgzg=="></script>
+
+
+
+
+
+</head>
+<body>
+        <main><header>
+    <div class="brand">
+        <div id="sidebar_btn">
+            <svg id="menu_icon" width="26px" height="26px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+</svg>
+
+</svg>
+        </div>
+
+        <div>
+            <a href="/">Okulus Dev</a>
+        </div>
+    </div>
+
+    <div class="toolbox">
+        <div id="theme_tool">
+            <svg id="dark_mode_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+</svg>
+
+</svg>
+            <svg id="light_mode_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+</svg>
+
+</svg>
+        </div>
+
+        
+            <div id="search_tool">
+                <svg id="search_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+</svg>
+
+</svg><div id="search_menu_wrapper" class="hidden">
+    <div id="search_menu">
+        <div id="search_menu_toolbar">
+            <div id="search_menu_input_wrapper">
+                <input id="search_menu_input" type="text" placeholder='Search Posts'>
+            </div>
+            <div id="search_menu_close_btn">
+                <svg width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+</svg>
+
+</svg>
+            </div>
+        </div>
+        <div id="search_menu_results">
+        </div>
+    </div>
+</div>
+</div>
+        
+
+        
+    </div>
+</header>
+<nav id="navbar" class="pure-menu">
+    <ul class="pure-menu-list"></ul>
+</nav>
+<div id="sidebar_canvas_overlay" class="hidden"></div>
+<div id="sidebar" class="close">
+    <ul></ul>
+</div><div id="content" class="content-margin">
+                
+    
+    <details class="collapsible-menu-wrapper"><summary class="collapsible-menu-type"><span>Table of contents</span></summary><div class="collapsible-menu">
+        
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#введение">Введение</a></li>
+    <li><a href="#hello-world">Hello World</a>
+      <ul>
+        <li><a href="#компиляция">Компиляция</a></li>
+      </ul>
+    </li>
+    <li><a href="#выполнение-системного-вызова-через-sysenter">Выполнение системного вызова через sysenter</a></li>
+    <li><a href="#выполнение-системного-вызова-через-syscall">Выполнение системного вызова через syscall</a></li>
+    <li><a href="#отладка-ассемблера-в-gdb">Отладка ассемблера в GDB</a></li>
+    <li><a href="#заключение">Заключение</a></li>
+  </ul>
+</nav>
+        
+    </div></details>
+
+
+
+    <div class="content-margin">
+
+
+
+<article class="line-numbers">
+    
+    
+    <h1 id="написание-и-отладка-кода-на-ассемблере-x86x64-в-linux">Написание и отладка кода на ассемблере x86/x64 в Linux</h1>
+<p>В продолжение <a href="https://rgateproject.github.io/post/assembler/">поста об языке ассемблера на моем другом сайте</a> я предлагаю вам прочитать эту статью. Если вы не знаете, что такое ассемблер, то советую сначала прочитать ту статью.</p>
+<p>Отмечу, что в рамках поста мы сосредоточимся на вопросе компиляции и отладки программ на ассемблере. Сам же язык ассемблера заслуживает отдельного большого поста, а то и серии постов.</p>
+<blockquote>
+<p>Если вы знаете ассемблер, то любая программа для вас — open source.</p>
+</blockquote>
+<h2 id="введение">Введение</h2>
+<p>Существует два широко используемых ассемблерных синтаксиса — так называемые AT&amp;T-синтаксис и Intel-синтаксис. Они не сильно друг от друга отличаются и легко переводятся один в другой. В мире Windows принято использовать синтаксис Intel. В мире unix систем, наоборот, практически всегда используется синтаксис AT&amp;T, а синтаксис Intel встречается крайне редко (например, он используется в утилите perf). Мы будем использовать синтаксис AT&amp;T</p>
+<p>Компиляторов ассемблера существует много. Мы будем использовать GNU Assembler (он же GAS). Скорее всего, он уже есть вашей системе. К тому же, если вы пользуетесь GCC и собираетесь писать ассемблерные вставки в коде на C, то именно с этим ассемблером вам предстоит работать. Из достойных альтернатив GAS можно отметить NASM и FASM.</p>
+<p>Наконец, язык ассемблера отличается в зависимости от архитектуры процессора. Пока что мы сосредоточимся на ассемблере для x86 (он же i386) и x64 (он же amd64), так как именно с этими архитектурами приходится чаще всего иметь дело. Впрочем, ARM тоже весьма распространен, главным образом на телефонах и планшетах. Еще из сравнительно популярного есть SPARC и PowerPC, но шансы столкнуться с ними весьма малы. Отмечу, что x86 и x64 можно было бы рассматривать отдельно, но эти архитектуры во многом похожи, поэтому я не вижу в этом большого смысла.</p>
+<h2 id="hello-world">Hello World</h2>
+<p>Рассмотрим типичный «Hello, world» для архитектуры x86 и Linux:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">.data</span>
+</span></span><span style="display:flex;"><span>msg:
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.ascii</span> <span style="color:#e6db74">&#34;Hello, world!\n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.set</span> <span style="color:#66d9ef">len</span>, . - <span style="color:#66d9ef">msg</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.text</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
+</span></span><span style="display:flex;"><span>_start:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># write
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$4</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$1</span>,   %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$msg</span>, %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$len</span>, %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">int</span> <span style="color:#66d9ef">$0x80</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># exit
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$1</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">xor</span> %ebx, %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">int</span> <span style="color:#66d9ef">$0x80</span>
+</span></span></code></pre></div><h3 id="компиляция">Компиляция</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Или: gcc -m32 -c hello-int80.s</span>
+</span></span><span style="display:flex;"><span>as --32 helloworld.s -o helloworld.o
+</span></span><span style="display:flex;"><span>ld -melf_i386 -s helloworld.o -o helloworld
+</span></span></code></pre></div><h2 id="выполнение-системного-вызова-через-sysenter">Выполнение системного вызова через sysenter</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">.data</span>
+</span></span><span style="display:flex;"><span>msg:
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.ascii</span> <span style="color:#e6db74">&#34;Hello, world!\n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">len</span> <span style="color:#960050;background-color:#1e0010">=</span> . - <span style="color:#66d9ef">msg</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.text</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>_start:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># write
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$4</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$1</span>,   %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$msg</span>, %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$len</span>, %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  <span style="color:#66d9ef">$write_ret</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   %esp, %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">sysenter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>write_ret:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># exit
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$1</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">xor</span>   %ebx, %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  <span style="color:#66d9ef">$exit_ret</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   %esp, %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">sysenter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>exit_ret:
+</span></span></code></pre></div><p>Сборка осуществляется аналогично сборке предыдущего примера.</p>
+<p>Как видите, принцип тот же, что при использовании int 0x80, только перед выполнением sysenter требуются поместить в стек адрес, по которому следует вернуть управление, а также совершить кое-какие дополнительные манипуляции с регистрами. Причины этого более подробно <a href="http://reverseengineering.stackexchange.com/a/2894/16763">объясняются здесь</a></p>
+<p>Инструкция sysenter работает быстрее int 0x80 и является предпочтительным способом совершения системных вызовов на x86.</p>
+<h2 id="выполнение-системного-вызова-через-syscall">Выполнение системного вызова через syscall</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">.data</span>
+</span></span><span style="display:flex;"><span>msg:
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.ascii</span> <span style="color:#e6db74">&#34;Hello, world!\n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.set</span> <span style="color:#66d9ef">len</span>, . - <span style="color:#66d9ef">msg</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.text</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
+</span></span><span style="display:flex;"><span>_start:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># write
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$1</span>,   %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$1</span>,   %rdi
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$msg</span>, %rsi
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$len</span>, %rdx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">syscall</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># exit
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$60</span>, %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">xor</span>  %rdi, %rdi
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">syscall</span>
+</span></span></code></pre></div><p>Компиляция производится так:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>as --64 hello-syscall.s -o hello-syscall.o
+</span></span><span style="display:flex;"><span>ld -melf_x86_64 -s hello-syscall.o -o hello-syscall
+</span></span></code></pre></div><p>Принцип все тот же, но есть важные отличия. Номера системных вызовов нужно брать из unistd_64.h, а не из unistd_32.h. Как видите, они совершенно другие. Так как это 64-х битный код, то и регистры мы используем 64-х битные. Номер системного вызова помещается в rax. До шести аргументов передается через регистры rdi, rsi, rdx, r10, r8 и r9. Возвращаемое значение помещается в регистр rax. Значения, сохраненные в остальных регистрах, при возвращении из системного вызова остаются прежними, за исключением регистров rcx и r11.</p>
+<p>Интересно, что в программе под x64 можно одновременно использовать системные вызовы как через syscall, так и через int 0x80.</p>
+<h2 id="отладка-ассемблера-в-gdb">Отладка ассемблера в GDB</h2>
+<p>Статья была бы не полной, если бы мы не затронули вопрос отладки всего этого хозяйства. Так как мы все равно очень плотно сидим на GNU-стэке, в качестве отладчика воспользуемся GDB. По большому счету, отладка не сильно отличается от отладки обычного кода на C, но есть нюансы.</p>
+<p>Например, вы не можете так просто взять и поставить брейкпоинт на процедуру main. Как минимум, у вас попросту нет отладочных символов с информацией о том, где эту main искать. Решение заключается в том, чтобы самостоятельно определить адрес точки входа в программу и поставить брейкпоинт на этот адрес:</p>
+<p><code>info files</code></p>
+<p>Увидим что-то вроде:</p>
+<pre tabindex="0"><code>[...]
+    Entry point: 0x4000b0
+[...]
+</code></pre><p>Далее говорим:</p>
+<pre tabindex="0"><code>b *0x4000b0
+r
+</code></pre><p>Какого-либо исходного кода у нас тоже нет, поэтому команда l работать не будет. Сами ассемблерные инструкции и есть исходный код! Так, например, можно посмотреть следующие 5 ассемблерных инструкций:</p>
+<p><code>x/5i $pc</code></p>
+<p>По понятным причинам, переход к очередной строчке кода при помощи команд n или s работать не будет. Вместо этих команд следует использовать команды перехода к следующей инструкции — ni, si, и так далее.</p>
+<p>Смотреть и изменять значения переменных мы тоже не можем. Однако ничто не мешает смотреть и изменять значения регистров:</p>
+<pre tabindex="0"><code>info registers
+p/x $rcx
+p $xmm1
+set $r15 = 0x123
+</code></pre><p>Наконец, стектрейсы нам тоже недоступны. Но ничто не мешает, например, посмотреть 8 ближайших значений на стеке:</p>
+<p><code>x/8g $sp</code></p>
+<p>По большому счету, это все отличие от отладки программы на C при наличии исходников. Кстати, вы можете легко посмотреть, в какой ассемблерных код транслируется ваш код на C, одним из следующих способов:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gcc -S test.c -o -
+</span></span><span style="display:flex;"><span>objdump -d ./myprog
+</span></span></code></pre></div><p>Как альтернативный вариант, можно воспользоваться Hopper или подобным интерактивным дизассемблером.</p>
+<p>Внезапно отладка программы, собранной без -g и/или с -O2, перестала казаться таким уж страшным делом, не так ли?</p>
+<h2 id="заключение">Заключение</h2>
+<p>В качестве домашнего задания можете попытаться написать программу на ассемблере, выводящую переменные окружения, а также переданные ей аргументы командной строки.</p>
+<p>Примите во внимание, что в Linux есть еще как минимум два способа сделать системный вызов — через так называемые vsyscall (считается устаревшим, но поддерживается для обратной совместимости) и VDSO (пришедший ему на замену). Эти способы основаны на отображении страницы ядра в адресное пространство процесса и призваны ускорить выполнение системных вызовов, не требующих проверки привилегий и других тяжелых действий со стороны ядра системы. В качестве примера вызова, который может быть ускорен таким образом, можно привести gettimeofday. К сожалению, рассмотрение vsyscall и VDSO выходит за рамки данного поста. Больше информации о них вы найдете по приведенным ниже ссылкам.</p>
+<p>Ссылки по теме:</p>
+<ul>
+<li><a href="http://stackoverflow.com/a/19942352/1565238">Объяснение vsyscall и VDSO</a></li>
+<li><a href="http://articles.manugarg.com/aboutelfauxiliaryvectors.html">Объяснение ELF Auxiliary Vectors</a></li>
+</ul>
+
+</article>
+</div>
+
+
+                
+                    
+                
+            </div>
+<footer>
+    <article>Copyright © 2023 by OkulusDev</article>
+</footer>
+
+</main>
+    </body>
+</html>

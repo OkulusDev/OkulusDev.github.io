@@ -1,0 +1,233 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang='ru'><head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href='https://okulusdev.github.io/favicon.ico' type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>debug - Okulus Dev</title>
+
+    
+
+    
+
+    
+    <meta name="author" content="Okulus Dev" />
+    
+
+    
+        <meta property="og:title" content="debug" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://okulusdev.github.io/tags/debug/" />
+
+    
+
+    
+        <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="debug"/>
+<meta name="twitter:description" content=""/>
+
+    <link rel="stylesheet" href="/style.min.fae245b6ce34259555eab2b011d31eb69cfeb04f46398e9c82df62439ad6edea66fa04d14a95b4bbf3ce9679be82b4badfed247f9962c2af62f53d0f389b424f.css" integrity="sha512-&#43;uJFts40JZVV6rKwEdMetpz&#43;sE9GOY6cgt9iQ5rW7epm&#43;gTRSpW0u/POlnm&#43;grS63&#43;0kf5liwq9i9T0POJtCTw==">
+
+
+
+
+
+    
+    <script>
+        if (!('theme' in localStorage)) {
+            localStorage.theme = 'dark';
+        }
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    </script>
+<script defer src="/js/header.ef6a12cbb6ff661b899d830d9eb30134ede25fc9c26aaddecec6089c686d2e45a0bf73fa531eb2aba666bfa46699790ecc7cfee38ebc17a00ccaeffd2155eea0.js" integrity="sha512-72oSy7b/ZhuJnYMNnrMBNO3iX8nCaq3ezsYInGhtLkWgv3P6Ux6yq6Zmv6RmmXkOzHz&#43;4468F6AMyu/9IVXuoA=="></script>
+
+
+
+    <script defer src="/js/zooming.684b5d075bf94d0adfa21a7e7eb9acec1ddfb2e7b47d6657981617f0db0cf50949f1172801595afa3051f51b28d67f6a2d0c41be677b59b564307d9dbe4a4fd2.js" integrity="sha512-aEtdB1v5TQrfohp&#43;frms7B3fsue0fWZXmBYX8NsM9QlJ8RcoAVla&#43;jBR9Rso1n9qLQxBvmd7WbVkMH2dvkpP0g=="></script>
+
+
+
+
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer src="/js/math.d7efde37b2eb8879651e1f4489bcd4d8203b8c2bf8ca12c9e1b8cd11bfd6395b172f4999fff43ce0d047889a2bdb71ee74aebbae5327590192d1144e790fcd7b.js" integrity="sha512-1&#43;/eN7LriHllHh9EibzU2CA7jCv4yhLJ4bjNEb/WOVsXL0mZ//Q84NBHiJor23HudK67rlMnWQGS0RROeQ/New=="></script>
+
+
+
+
+
+
+    
+    
+    
+    <script defer src="/js/search-ru.918a3fb96c6477c149454fef13293a2f51fed535ccbd2998800e7c4748512f4f23a2ef947cab8c098900a93d5bd56c2397ab640276e46fd6364661cef4d020ce.js" integrity="sha512-kYo/uWxkd8FJRU/vEyk6L1H&#43;1TXMvSmYgA58R0hRL08jou&#43;UfKuMCYkAqT1b1Wwjl6tkAnbkb9Y2RmHO9NAgzg=="></script>
+
+
+
+
+
+</head>
+<body>
+        <main><header>
+    <div class="brand">
+        <div id="sidebar_btn">
+            <svg id="menu_icon" width="26px" height="26px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+</svg>
+
+</svg>
+        </div>
+
+        <div>
+            <a href="/">Okulus Dev</a>
+        </div>
+    </div>
+
+    <div class="toolbox">
+        <div id="theme_tool">
+            <svg id="dark_mode_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+</svg>
+
+</svg>
+            <svg id="light_mode_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+</svg>
+
+</svg>
+        </div>
+
+        
+            <div id="search_tool">
+                <svg id="search_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+</svg>
+
+</svg><div id="search_menu_wrapper" class="hidden">
+    <div id="search_menu">
+        <div id="search_menu_toolbar">
+            <div id="search_menu_input_wrapper">
+                <input id="search_menu_input" type="text" placeholder='Search Posts'>
+            </div>
+            <div id="search_menu_close_btn">
+                <svg width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+</svg>
+
+</svg>
+            </div>
+        </div>
+        <div id="search_menu_results">
+        </div>
+    </div>
+</div>
+</div>
+        
+
+        
+    </div>
+</header>
+<nav id="navbar" class="pure-menu">
+    <ul class="pure-menu-list"></ul>
+</nav>
+<div id="sidebar_canvas_overlay" class="hidden"></div>
+<div id="sidebar" class="close">
+    <ul></ul>
+</div><div id="content" class="content-margin">
+                <div>
+    <div class="term-title">
+        <h1>debug</h1>
+        
+                <div class="icon">
+                    <a rel="noopener" target="_blank" href="https://okulusdev.github.io/tags/debug/index.xml"> 
+                        
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle>
+</svg>
+
+
+                    </a>
+                </div>
+            
+        </div>
+    
+        <div class="content-margin">
+
+<ul class="list-layout">
+    
+        <li>
+            <a href="/post/write_debug_asm_code/">Отладка и программирование на ассемблере</a>
+            
+                <span>
+                    2023/11/03
+                </span>
+            
+        </li>
+    
+</ul></div>
+        
+            
+        
+    
+</div>
+
+                
+                    
+                
+            </div>
+<footer>
+    <article>Copyright © 2023 by OkulusDev</article>
+</footer>
+
+</main>
+    </body>
+</html>

@@ -1,0 +1,613 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang='ru'><head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href='https://okulusdev.github.io/favicon.ico' type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Основные инструкции ассемблера x86_64 - Okulus Dev</title>
+
+    
+
+    
+
+    
+    <meta name="author" content="Okulus Dev" />
+    
+
+    
+        <meta property="og:title" content="Основные инструкции ассемблера x86_64" />
+<meta property="og:description" content="Шпаргалка по основным инструкциям ассемблера x86/x64 В прошлой статье мы написали наше первое hello world приложение на асме, научились его компилировать и отлаживать, а также узнали, как делать системные вызовы в Linux. Сегодня же мы познакомимся непосредственно с ассемблерными инструкциями, понятием регистров, стека и вот этого всего. Ассемблеры для архитектур x86 (a.k.a i386) и x64 (a.k.a amd64) очень похожи, в связи с чем нет смысла рассматривать их в отдельных статьях. Притом акцент я постараюсь делать на x64, попутно отмечая отличия от x86, если они есть." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://okulusdev.github.io/post/assembly_basic/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2023-11-03T19:06:04+07:00" />
+<meta property="article:modified_time" content="2023-11-03T19:06:04+07:00" />
+
+    
+
+    
+        <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Основные инструкции ассемблера x86_64"/>
+<meta name="twitter:description" content="Шпаргалка по основным инструкциям ассемблера x86/x64 В прошлой статье мы написали наше первое hello world приложение на асме, научились его компилировать и отлаживать, а также узнали, как делать системные вызовы в Linux. Сегодня же мы познакомимся непосредственно с ассемблерными инструкциями, понятием регистров, стека и вот этого всего. Ассемблеры для архитектур x86 (a.k.a i386) и x64 (a.k.a amd64) очень похожи, в связи с чем нет смысла рассматривать их в отдельных статьях. Притом акцент я постараюсь делать на x64, попутно отмечая отличия от x86, если они есть."/>
+
+    <link rel="stylesheet" href="/style.min.fae245b6ce34259555eab2b011d31eb69cfeb04f46398e9c82df62439ad6edea66fa04d14a95b4bbf3ce9679be82b4badfed247f9962c2af62f53d0f389b424f.css" integrity="sha512-&#43;uJFts40JZVV6rKwEdMetpz&#43;sE9GOY6cgt9iQ5rW7epm&#43;gTRSpW0u/POlnm&#43;grS63&#43;0kf5liwq9i9T0POJtCTw==">
+
+
+
+
+
+    
+    <script>
+        if (!('theme' in localStorage)) {
+            localStorage.theme = 'dark';
+        }
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute("data-theme", "dark");
+        } else {
+            document.documentElement.setAttribute("data-theme", "light");
+        }
+    </script>
+<script defer src="/js/header.ef6a12cbb6ff661b899d830d9eb30134ede25fc9c26aaddecec6089c686d2e45a0bf73fa531eb2aba666bfa46699790ecc7cfee38ebc17a00ccaeffd2155eea0.js" integrity="sha512-72oSy7b/ZhuJnYMNnrMBNO3iX8nCaq3ezsYInGhtLkWgv3P6Ux6yq6Zmv6RmmXkOzHz&#43;4468F6AMyu/9IVXuoA=="></script>
+
+
+
+    <script defer src="/js/zooming.684b5d075bf94d0adfa21a7e7eb9acec1ddfb2e7b47d6657981617f0db0cf50949f1172801595afa3051f51b28d67f6a2d0c41be677b59b564307d9dbe4a4fd2.js" integrity="sha512-aEtdB1v5TQrfohp&#43;frms7B3fsue0fWZXmBYX8NsM9QlJ8RcoAVla&#43;jBR9Rso1n9qLQxBvmd7WbVkMH2dvkpP0g=="></script>
+
+
+
+
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer src="/js/math.d7efde37b2eb8879651e1f4489bcd4d8203b8c2bf8ca12c9e1b8cd11bfd6395b172f4999fff43ce0d047889a2bdb71ee74aebbae5327590192d1144e790fcd7b.js" integrity="sha512-1&#43;/eN7LriHllHh9EibzU2CA7jCv4yhLJ4bjNEb/WOVsXL0mZ//Q84NBHiJor23HudK67rlMnWQGS0RROeQ/New=="></script>
+
+
+
+
+    
+        
+        
+            <script defer src="/js/builtin-copy.56e07a74dd440b068ab36af35542ed8960865686c19fb809f38436877ac081570612cc8a913650b0c0e3073a336680c5df960e73bf7b1de83dc6aa996f2db858.js" integrity="sha512-VuB6dN1ECwaKs2rzVULtiWCGVobBn7gJ84Q2h3rAgVcGEsyKkTZQsMDjBzozZoDF35YOc797Heg9xqqZby24WA=="></script>
+        
+    
+
+
+
+    
+    
+    
+    <script defer src="/js/search-ru.918a3fb96c6477c149454fef13293a2f51fed535ccbd2998800e7c4748512f4f23a2ef947cab8c098900a93d5bd56c2397ab640276e46fd6364661cef4d020ce.js" integrity="sha512-kYo/uWxkd8FJRU/vEyk6L1H&#43;1TXMvSmYgA58R0hRL08jou&#43;UfKuMCYkAqT1b1Wwjl6tkAnbkb9Y2RmHO9NAgzg=="></script>
+
+
+
+
+
+</head>
+<body>
+        <main><header>
+    <div class="brand">
+        <div id="sidebar_btn">
+            <svg id="menu_icon" width="26px" height="26px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+</svg>
+
+</svg>
+        </div>
+
+        <div>
+            <a href="/">Okulus Dev</a>
+        </div>
+    </div>
+
+    <div class="toolbox">
+        <div id="theme_tool">
+            <svg id="dark_mode_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+</svg>
+
+</svg>
+            <svg id="light_mode_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+</svg>
+
+</svg>
+        </div>
+
+        
+            <div id="search_tool">
+                <svg id="search_btn" class="toolbox-btn" width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+</svg>
+
+</svg><div id="search_menu_wrapper" class="hidden">
+    <div id="search_menu">
+        <div id="search_menu_toolbar">
+            <div id="search_menu_input_wrapper">
+                <input id="search_menu_input" type="text" placeholder='Search Posts'>
+            </div>
+            <div id="search_menu_close_btn">
+                <svg width="18px" height="18px" viewBox="0 0 24 24">
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24" height="24" viewBox="0 0 24 24" fill="none"
+    stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+</svg>
+
+</svg>
+            </div>
+        </div>
+        <div id="search_menu_results">
+        </div>
+    </div>
+</div>
+</div>
+        
+
+        
+    </div>
+</header>
+<nav id="navbar" class="pure-menu">
+    <ul class="pure-menu-list"></ul>
+</nav>
+<div id="sidebar_canvas_overlay" class="hidden"></div>
+<div id="sidebar" class="close">
+    <ul></ul>
+</div><div id="content" class="content-margin">
+                
+    
+    <details class="collapsible-menu-wrapper"><summary class="collapsible-menu-type"><span>Table of contents</span></summary><div class="collapsible-menu">
+        
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#регистры-общего-назначения">Регистры общего назначения</a></li>
+    <li><a href="#адресация">Адресация</a></li>
+    <li><a href="#арифметические-операции">Арифметические операции</a></li>
+    <li><a href="#логические-и-битовые-операции">Логические и битовые операции</a></li>
+    <li><a href="#условные-выражения-и-циклы">Условные выражения и циклы</a></li>
+    <li><a href="#операции-со-строками">Операции со строками</a></li>
+    <li><a href="#работа-со-стеком-и-процедуры">Работа со стеком и процедуры</a></li>
+    <li><a href="#заключение">Заключение</a></li>
+  </ul>
+</nav>
+        
+    </div></details>
+
+
+
+    <div class="content-margin">
+
+
+
+<article class="line-numbers">
+    
+    
+    <h1 id="шпаргалка-по-основным-инструкциям-ассемблера-x86x64">Шпаргалка по основным инструкциям ассемблера x86/x64</h1>
+<p><a href="https://okulusdev.github.io/post/write_debug_asm_code">В прошлой статье</a> мы написали наше первое hello world приложение на асме, научились его компилировать и отлаживать, а также узнали, как делать системные вызовы в Linux. Сегодня же мы познакомимся непосредственно с ассемблерными инструкциями, понятием регистров, стека и вот этого всего. Ассемблеры для архитектур x86 (a.k.a i386) и x64 (a.k.a amd64) очень похожи, в связи с чем нет смысла рассматривать их в отдельных статьях. Притом акцент я постараюсь делать на x64, попутно отмечая отличия от x86, если они есть. Далее предполагается, что вы уже знаете, например, чем стек отличается от кучи, и объяснять такие вещи не требуется.</p>
+<h2 id="регистры-общего-назначения">Регистры общего назначения</h2>
+<p>Регистр — это небольшой (обычно 4 или 8 байт) кусочек памяти в процессоре с чрезвычайно большой скоростью доступа. Регистры делятся на регистры специального назначения и регистры общего назначения. Нас сейчас интересуют регистры общего назначения. Как можно догадаться по названию, программа может использовать эти регистры под свои нужды, как ей вздумается.</p>
+<p>На x86 доступно восемь 32-х битных регистров общего назначения — eax, ebx, ecx, edx, esp, ebp, esi и edi. Регистры не имеют заданного наперед типа, то есть, они могут трактоваться как знаковые или беззнаковые целые числа, указатели, булевы значения, ASCII-коды символов, и так далее. Несмотря на то, что в теории эти регистры можно использовать как угодно, на практике обычно каждый регистр используется определенным образом. Так, esp указывает на вершину стека, ecx играет роль счетчика, а в eax записывается результат выполнения операции или процедуры. Существуют 16-и битные регистры ax, bx, cx, dx, sp, bp, si и di, представляющие собой 16 младших бит соответствующих 32-х битных регистров. Также доступны и 8-и битовые регистры ah, al, bh, bl, ch, cl, dh и dl, которые представляют собой старшие и младшие байты регистров ax, bx, cx и dx соответственно.</p>
+<p>Рассмотрим пример. Допустим, выполняются следующие три инструкции:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>(gdb) x/3i $pc
+</span></span><span style="display:flex;"><span>=&gt; 0x8048074: mov    $0xaabbccdd,%eax
+</span></span><span style="display:flex;"><span>   0x8048079: mov    $0xee,%al
+</span></span><span style="display:flex;"><span>   0x804807b: mov    $0x1234,%ax
+</span></span></code></pre></div><p>Значения регистров после записи в eax значения 0xAABBCCDD:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>(gdb) p/x $eax
+</span></span><span style="display:flex;"><span>$1 = 0xaabbccdd
+</span></span><span style="display:flex;"><span>(gdb) p/x $ax
+</span></span><span style="display:flex;"><span>$2 = 0xccdd
+</span></span><span style="display:flex;"><span>(gdb) p/x $ah
+</span></span><span style="display:flex;"><span>$3 = 0xcc
+</span></span><span style="display:flex;"><span>(gdb) p/x $al
+</span></span><span style="display:flex;"><span>$4 = 0xdd
+</span></span></code></pre></div><p>Значения после записи в регистр al значения 0xEE:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>(gdb) p/x $eax
+</span></span><span style="display:flex;"><span>$5 = 0xaabbccee
+</span></span><span style="display:flex;"><span>(gdb) p/x $ax
+</span></span><span style="display:flex;"><span>$6 = 0xccee
+</span></span><span style="display:flex;"><span>(gdb) p/x $ah
+</span></span><span style="display:flex;"><span>$7 = 0xcc
+</span></span><span style="display:flex;"><span>(gdb) p/x $al
+</span></span><span style="display:flex;"><span>$8 = 0xee
+</span></span></code></pre></div><p>Значения регистров после записи в ax числа 0x1234:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>(gdb) p/x $eax
+</span></span><span style="display:flex;"><span>$9 = 0xaabb1234
+</span></span><span style="display:flex;"><span>(gdb) p/x $ax
+</span></span><span style="display:flex;"><span>$10 = 0x1234
+</span></span><span style="display:flex;"><span>(gdb) p/x $ah
+</span></span><span style="display:flex;"><span>$11 = 0x12
+</span></span><span style="display:flex;"><span>(gdb) p/x $al
+</span></span><span style="display:flex;"><span>$12 = 0x34
+</span></span></code></pre></div><p>Как видите, ничего сложного.</p>
+<p><em>Примечание</em>: Синтаксис GAS позволяет явно указывать размеры операндов путем использования суффиксов b (байт), w (слово, 2 байта), l (длинное слово, 4 байта), q (четверное слово, 8 байт) и некоторых других. Например, вместо команды mov $0xEE, %al можно написать movb $0xEE, %al, вместо mov $0x1234, %ax — movw $0x1234, %ax, и так далее. В современном GAS эти суффиксы являются опциональными и я лично их не использую. Но не пугайтесь, если увидите их в чужом коде.</p>
+<p>На x64 размер регистров был увеличен до 64-х бит. Соответствующие регистры получили название rax, rbx, и так далее. Кроме того, регистров общего назначения стало шестнадцать вместо восьми. Дополнительные регистры получили названия r8, r9, …, r15. Соответствующие им регистры, которые представляют младшие 32, 16 и 8 бит, получили название r8d, r8w, r8b, и по аналогии для регистров r9-r15. Кроме того, появились регистры, представляющие собой младшие 8 бит регистров rsi, rdi, rbp и rsp — sil, dil, bpl и spl соответственно.</p>
+<h2 id="адресация">Адресация</h2>
+<p>Как уже отмечалось, регистры могут трактоваться, как указатели на данные в памяти. Для разыменования таких указателей используется специальный синтаксис:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  (%rsp), %rax
+</span></span></code></pre></div><p>Эта запись означает «прочитай 8 байт по адресу, записанному в регистре rsp, и сохрани их в регистр rax». При запуске программы rsp указывает на вершину стека, где хранится число аргументов, переданных программе (argc), указатели на эти аргументы, а также переменные окружения и кое-какая другая информация. Таким образом, в результате выполнения приведенной выше инструкции (разумеется, при условии, что перед ней не выполнялось каких-либо других инструкций) в rax будет записано количество аргументов, с которыми была запущена программа.</p>
+<p>В одной команде можно указывать адрес и смешение (как положительное, так и отрицательное) относительно него:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#ae81ff">8</span>(%rsp), %rax
+</span></span></code></pre></div><p>Эта запись означает «возьми rsp, прибавь к нему 8, прочитай 8 байт по получившемуся адресу и положи их в rax». Таким образом, в rax будет записан адрес строки, представляющей собой первый аргумент программы, то есть, имя исполняемого файла.</p>
+<p>При работе с массивами бывает удобно обращаться к элементу с определенным индексом. Соответствующий синтаксис:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#75715e"># инструкция xchg меняет значения местами
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">xchg</span> <span style="color:#ae81ff">16</span>(%rsp,%rcx,<span style="color:#ae81ff">8</span>), %rax
+</span></span></code></pre></div><p>Читается так: «посчитай rcx умножить на 8 + rsp + 16, и поменяй местами 8 байт (размер регистра) по получившемуся адресу и значение регистра rax». Другими словами, rsp и 16 все так же играют роль смещения, rcx играет роль индекса в массиве, а 8 — это размер элемента массива. При использовании данного синтаксиса допустимыми размерами элемента являются только 1, 2, 4 и 8. Если требуется какой-то другой размер, можно использовать инструкции умножения, бинарного сдвига и прочие, которые мы рассмотрим далее.</p>
+<p>Наконец, следующий код тоже валиден:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">data</span>
+</span></span><span style="display:flex;"><span>msg:
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.ascii</span> <span style="color:#e6db74">&#34;Hello, world!\n&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.text</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
+</span></span><span style="display:flex;"><span>_start:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># обнуление rcx
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">xor</span> %rcx, %rcx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">msg</span>(,%rcx,<span style="color:#ae81ff">8</span>), %al
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">msg</span>, %ah
+</span></span></code></pre></div><p>В смысле, что можно не указывать регистр со смещением или вообще какие-либо регистры. В результате выполнения этого кода в регистры al и ah будет записан ASCII-код буквы H, или 0x48.</p>
+<p>В этом контексте хотелось бы упомянуть еще одну полезную ассемблерную инструкцию:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#75715e"># rax := rcx*8 + rax + 123
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">lea</span> <span style="color:#ae81ff">123</span>(%rax,%rcx,<span style="color:#ae81ff">8</span>), %rax
+</span></span></code></pre></div><p>Инструкция lea очень удобна, так как позволяет сразу выполнить умножение и несколько сложений.</p>
+<p><strong>Fun fact</strong>! На x64 в байткоде инструкций никогда не используются 64-х битовые смещения. В отличие от x86, инструкции часто оперируют не абсолютными адресами, а адресами относительно адреса самой инструкции, что позволяет обращаться к ближайшим +/- 2 Гб оперативной памяти. Соответствующий синтаксис:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">movb</span> <span style="color:#66d9ef">msg</span>(%rip), %al
+</span></span></code></pre></div><p>Сравним длины опкодов «обычного» и «относительного» mov (objdump -d):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>4000b0: 8a 0c 25 e8 00 60 00  mov    0x6000e8,%cl
+</span></span><span style="display:flex;"><span>4000b7: 8a 05 2b 00 20 00     mov    0x20002b(%rip),%al # 0x6000e8
+</span></span></code></pre></div><p>Как видите, «относительный» mov еще и на один байт короче! Что это за регистр такой rip мы узнаем чуть ниже.</p>
+<p>Для записи же полного 64-х битового значения в регистр предусмотрена специальная инструкция:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">movabs</span> <span style="color:#66d9ef">$0x1122334455667788</span>, %rax
+</span></span></code></pre></div><p>Другими словами, процессоры x64 так же экономно кодируют инструкции, как и процессоры x86, и в наше время нет особо смысла использовать процессоры x86 в системах, имеющих пару гигабайт оперативной памяти или меньше (мобильные устройства, холодильники, микроволновки, и так далее). Скорее всего, процессоры x64 будут даже более эффективны за счет большего числа доступных регистров и большего размера этих регистров.</p>
+<h2 id="арифметические-операции">Арифметические операции</h2>
+<p>Рассмотрим основные арифметические операции:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#75715e"># инциализируем значения регистров
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$123</span>, %rax
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$456</span>, %rcx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># инкремент: rax = rax + 1 = 124
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">inc</span>  %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># декремент: rax = rax - 1 = 123
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">dec</span>  %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># сложение: rax = rax + rcx = 579
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">add</span>  %rcx, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># вычитание: rax = rax - rcx = 123
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">sub</span>  %rcx, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># изменение знака: rcx = - rcx = -456
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">neg</span>  %rcx
+</span></span></code></pre></div><p>Здесь и далее операндами могут быть не только регистры, но и участки памяти или константы. Но оба операнда не могут быть участками памяти. Это правило применимо ко всем инструкциям ассемблера x86/x64, по крайней мере, из рассмотренных в данной статье.</p>
+<p>Пример умножения:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$100</span>, %al
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$3</span>, %cl
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mul</span> %cl
+</span></span></code></pre></div><p>В данном примере инструкция mul умножает al на cl, и сохраняет результат умножения в пару регистров al и ah. Таким образом, ax примет значение 0x12C или 300 в десятичной нотации. В худшем случае для сохранения результата перемножения двух N-байтовых значений может потребоваться до 2N байт. В зависимости от размера операнда результат сохраняется в al:ah, ax:dx, eax:edx или rax:rdx. Притом в качестве множителей всегда используется первый из этих регистров и переданный инструкции аргумент.</p>
+<p>Знаковое умножение производится точно так же при помощи инструкции imul. Кроме того, существуют варианты imul с двумя и тремя аргументами:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$123</span>, %rax
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$456</span>, %rcx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = rax * rcx = 56088
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">imul</span> %rcx, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># rcx = rax * 10 = 560880
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">imul</span> <span style="color:#66d9ef">$10</span>, %rax, %rcx
+</span></span></code></pre></div><p>Инструкции div и idiv производят действия, обратные mul и imul. Например:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$0</span>,   %rdx
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$456</span>, %rax
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$123</span>, %rcx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = rdx:rax / rcx = 3
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rdx = rdx:rax % rcx = 87
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">div</span>  %rcx
+</span></span></code></pre></div><p>Как видите, был получен результат целочисленного деления, а также остаток от деления.</p>
+<p>Это далеко не все арифметические инструкции. Например, есть еще adc (сложение с учетом флага переноса), sbb (вычитание с учетом займа), а также соответствующие им инструкции, выставляющие и очищающие соответствующие флаги (ctc, clc), и многие другие. Но они распространены намного меньше, и потому в рамках данной статьи не рассматриваются.</p>
+<h2 id="логические-и-битовые-операции">Логические и битовые операции</h2>
+<p>Как уже отмечалось, особой типизации в ассемблере x86/x64 не предусмотрено. Поэтому не стоит удивляться, что в нем нет отдельных инструкций для выполнения булевых операций и отдельных для выполнения битовых операций. Вместо этого есть один набор инструкций, работающих с битами, а уж как интерпретировать результат — решает конкретная программа.</p>
+<p>Так, например, выглядит вычисление простейшего логического выражения:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$0</span>, %rax <span style="color:#75715e"># a = false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$1</span>, %rbx <span style="color:#75715e"># b = true
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$0</span>, %rcx <span style="color:#75715e"># c = false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># rdx := a || !(b &amp;&amp; c)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">mov</span>  %rcx, %rdx  <span style="color:#75715e"># rdx = c
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">and</span>  %rbx, %rdx  <span style="color:#75715e"># rdx &amp;= b
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">not</span>  %rdx        <span style="color:#75715e"># rdx = ~ rdx
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">or</span>   %rax, %rdx  <span style="color:#75715e"># rdx |= a
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">and</span>  <span style="color:#66d9ef">$1</span>,   %rdx  <span style="color:#75715e"># rdx &amp;= 1
+</span></span></span></code></pre></div><p>Заметьте, что здесь мы использовали по одному младшему биту в каждом из 64-х битовых регистров. Таким образом, в старших битах образуется мусор, который мы обнуляем последней командой.</p>
+<p>Еще одна полезная инструкция — это xor (исключающее или). В логических выражениях xor используется нечасто, однако с его помощью часто происходит обнуление регистров. Если посмотреть на опкоды инструкций, то становится понятно, почему:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>  4000b3: 48 31 db              xor    %rbx,%rbx
+</span></span><span style="display:flex;"><span>  4000b6: 48 ff c3              inc    %rbx
+</span></span><span style="display:flex;"><span>  4000b9: 48 c7 c3 01 00 00 00  mov    $0x1,%rbx
+</span></span></code></pre></div><p>Как видите, инструкции xor и inc кодируются всего лишь тремя байтами каждая, в то время, как делающая то же самое инструкция mov занимает целых семь байт. Каждый отдельный случай, конечно, лучше бенчмаркать отдельно, но общее эвристическое правило такое — чем короче код, тем больше его помещается в кэши процессора, тем быстрее он работает.</p>
+<p>В данном контексте также следует вспомнить инструкции побитового сдвига, тестирования битов (bit test) и сканирования битов (bit scan):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#75715e"># положим что-нибудь в регистр
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">movabs</span> <span style="color:#66d9ef">$0xc0de1c0ffee2beef</span>, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># сдвиг влево на 3 бита
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = 0x0de1c0ffee2beef0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">shl</span> <span style="color:#66d9ef">$4</span>,  %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># сдвиг вправо на 7 бит
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = 0x001bc381ffdc57dd
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">shr</span> <span style="color:#66d9ef">$7</span>,  %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># циклический сдвиг вправо на 5 бит
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = 0xe800de1c0ffee2be
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">ror</span> <span style="color:#66d9ef">$5</span>,  %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># циклический сдвиг влево на 5 бит
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = 0x001bc381ffdc57dd
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">rol</span> <span style="color:#66d9ef">$5</span>,  %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># положить в CF (см далее) значение 13-го бита
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># CF = !!(0x1bc381ffdc57dd &amp; (1 &lt;&lt; 13)) = 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">bt</span>  <span style="color:#66d9ef">$13</span>, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># то же самое + установить бит (bit test and set)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = 0x001bc381ffdc77dd, CF = 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">bts</span> <span style="color:#66d9ef">$13</span>, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># то же самое + сбросить бит (bit test and reset)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = 0x001bc381ffdc57dd, CF = 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">btr</span> <span style="color:#66d9ef">$13</span>, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># то же самое + инвертировать бит (bit test and complement)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rax = 0x001bc381ffdc77dd, CF = 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">btc</span> <span style="color:#66d9ef">$13</span>, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># найти самый младший ненулевой байт (bit scan forward)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rcx = 0, ZF = 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">bsf</span> %rax, %rcx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># найти самый старший ненулевой байт (bit scan reverse)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># rdx = 52, ZF = 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">bsr</span> %rax, %rdx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># если все биты нулевые, ZF = 1, значение rdx неопределено
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">xor</span> %rax, %rax
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bsf</span> %rax, %rdx
+</span></span></code></pre></div><p>Еще есть битовые сдвиги со знаком (sal, sar), циклические сдвиги с флагом переноса (rcl, rcr), а также сдвиги двойной точности (shld, shrd). Но используются они не так уж часто, да и утомишься перечислять вообще все инструкции. Поэтому их изучение я оставляю вам в качестве домашнего задания.</p>
+<h2 id="условные-выражения-и-циклы">Условные выражения и циклы</h2>
+<p>Выше несколько раз упоминались какие-то там флаги, например, флаг переноса. Под флагами понимаются биты специального регистра eflags / rflags (название на x86 и x64 соответственно). Напрямую обращаться к этому регистру при помощи инструкций mov, add и подобных нельзя, но он изменяется и используется различными инструкциями косвенно. Например, уже упомянутый флаг переноса (carry flag, CF) хранится в нулевом бите eflags / rflags и используется, например, в той же инструкции bt. Еще из часто используемых флагов можно назвать zero flag (ZF, 6-ой бит), sign flag (SF, 7-ой бит), direction flag (DF, 10-ый бит) и overflow flag (OF, 11-ый бит).</p>
+<p>Еще из таких неявных регистров следует назвать eip / rip, хранящий адрес текущей инструкции. К нему также нельзя обращаться напрямую, но он виден в GDB вместе с eflags / rflags, если сказать info registers, и косвенно изменяется всеми инструкциям. Большинство инструкций просто увеличивают eip / rip на длину этой инструкции, но есть и исключения из этого правила. Например, инструкция jmp просто осуществляет переход по заданному адресу:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>  <span style="color:#75715e"># обнуляем rax
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">xor</span>  %rax, %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jmp</span> <span style="color:#66d9ef">next</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># эта инструкция будет пропущена
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">inc</span>  %rax
+</span></span><span style="display:flex;"><span>next:
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">inc</span>  %rax
+</span></span></code></pre></div><p>В результате значение rax будет равно единице, так как первая инструкция inс будет пропущена. Заметьте, что адрес перехода также может быть записан в регистре:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>  <span style="color:#a6e22e">xor</span> %rax, %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$next</span>, %rcx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jmp</span> *%rcx
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">inc</span> %rax
+</span></span><span style="display:flex;"><span>next:
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">inc</span> %rax
+</span></span></code></pre></div><p>Впрочем, на практике такого кода лучше избегать, так как он ломает предсказание переходов и потому менее эффективен.</p>
+<p><em>Примечание</em>: GAS позволяет давать меткам цифирные имена типа 1:, 2:, и так далее, и переходить к ближайшей предыдущей или следующей метке с заданным номером инструкциями вроде jmp 1b и jmp 1f. Это довольно удобно, так как иногда бывает трудно придумать меткам осмысленные имена. Подробности можно найти здесь.</p>
+<p>Условные переходы обычно осуществляются при помощи инструкции cmp, которая сравнивает два своих операнда и выставляет соответствующие флаги, за которой следует инструкция из семейства je, jg и подобных:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>  <span style="color:#a6e22e">cmp</span> %rax, %rcx
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">je</span>  <span style="color:#ae81ff">1</span><span style="color:#66d9ef">f</span> <span style="color:#75715e"># перейти, если равны (equal)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">jl</span>  <span style="color:#ae81ff">1</span><span style="color:#66d9ef">f</span> <span style="color:#75715e"># перейти, если знаково меньше (less)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">jb</span>  <span style="color:#ae81ff">1</span><span style="color:#66d9ef">f</span> <span style="color:#75715e"># перейти, если беззнаково меньше (below)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">jg</span>  <span style="color:#ae81ff">1</span><span style="color:#66d9ef">f</span> <span style="color:#75715e"># перейти, если знаково больше (greater)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ja</span>  <span style="color:#ae81ff">1</span><span style="color:#66d9ef">f</span> <span style="color:#75715e"># перейти, если беззнаково больше (above)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">1:</span>
+</span></span></code></pre></div><p>Существует также инструкции jne (перейти, если не равны), jle (перейти, если знаково меньше или равны), jna (перейти, если беззнаково не больше) и подобные. Принцип их именования, надеюсь, очевиден. Вместо je / jne часто пишут jz / jnz, так как инструкции je / jne просто проверяют значение ZF. Также есть инструкции, проверяющие другие флаги — js, jo и jp, но на практике они используются редко. Все эти инструкции вместе взятые обычно называют jcc. То есть, вместо конкретных условий пишутся две буквы «c», от «condition». Здесь можно найти хорошую сводную таблицу по всем инструкциям jcc и тому, какие флаги они проверяют.</p>
+<p>Помимо cmp также часто используют инструкцию test:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>  <span style="color:#a6e22e">test</span> %rax, %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jz</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">f</span> <span style="color:#75715e"># перейти, если rax == 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">js</span> <span style="color:#ae81ff">2</span><span style="color:#66d9ef">f</span> <span style="color:#75715e"># перейти, если rax &lt; 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">1:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># какой-то код
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">2:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># какой-то еще код
+</span></span></span></code></pre></div><p><strong>Fun fact!</strong> Интересно, что cmp и test в душе являются теми же sub и and, только не изменяют своих операндов. Это знание можно использовать для одновременного выполнения sub или and и условного перехода, без дополнительных инструкций cmp или test.</p>
+<p>Еще из инструкций, связанных с условными переходами, можно отметить следующие.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">jrcxz</span>  <span style="color:#ae81ff">1</span><span style="color:#66d9ef">f</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># какой-то код
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">1:</span>
+</span></span></code></pre></div><p>Инструкция jrcxz осуществляет переход только в том случае, если значение регистра rcx равно нулю.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">cmovge</span> %rcx, %rax
+</span></span></code></pre></div><p>Инструкции семейства cmovcc (conditional move) работают как mov, но только при выполнении заданного условия, по аналогии с jcc.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">setnz</span> %al
+</span></span></code></pre></div><p>Инструкции setcc присваивают однобайтовому регистру или байту в памяти значение 1, если заданное условие выполняется, и 0 иначе.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">cmpxchg</span> %rcx, (%rdx)
+</span></span></code></pre></div><p>Сравнить rax с заданным куском памяти. Если равны, выставить ZF и сохранить по указанному адресу значение указанного регистра, в данном примере rcx. Иначе очистить ZF и загрузить значение из памяти в rax. Также оба операнда могут быть регистрами.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">cmpxchg8b</span> (%rsi)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cmpxchg16b</span> (%rsi)
+</span></span></code></pre></div><p>Инструкция cmpxchg8b главным образом нужна в x86. Она работает аналогично cmpxchg, только производит compare and swap сразу 8-и байт. Регистры edx:eax используются для сравнения, а регистры ecx:ebx хранят то, что мы хотим записать. Инструкция cmpxchg16b по тому же принципу производит compare and swap сразу 16-и байт на x64.</p>
+<p><strong>Важно!</strong> Примите во внимание, что без префикса lock все эти compare and swap инструкции не атомарны.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$10</span>, %rcx
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">1:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># какой-то код
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">loop</span>   <span style="color:#ae81ff">1</span><span style="color:#66d9ef">b</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># loopz  1b
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"># loopnz 1b
+</span></span></span></code></pre></div><p>Инструкция loop уменьшает значение регистра rcx на единицу, и если после этого rcx != 0, осуществляет переход на заданную метку. Инструкции loopz и loopnz работают аналогично, только условия более сложные — (rcx != 0) &amp;&amp; (ZF == 1) и (rcx != 0) &amp;&amp; (ZF == 0) соответственно.</p>
+<p>Не нужно быть семи пядей во лбу, чтобы изобразить при помощи этих инструкций конструкцию if-then-else или циклы for / while, поэтому двигаемся дальше.</p>
+<h2 id="операции-со-строками">Операции со строками</h2>
+<p>Рассмотрим следующий кусок кода:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$str1</span>, %rsi
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$str2</span>, %edi
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cld</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cmpsb</span>
+</span></span></code></pre></div><p>В регистры rsi и rdi кладутся адреса двух строк. Командой cld очищается флаг направления (DF). Инструкция, выполняющая обратное действие, называется std. Затем в дело вступает инструкция cmpsb. Она сравнивает байты (%rsi) и (%rdi) и выставляет флаги в соответствии с результатом сравнения. Затем, если DF = 0, rsi и rdi увеличиваются на единицу (количество байт в том, что мы сравнивали), иначе — уменьшаются. Аналогичные инструкции cmpsw, cmpsl и cmpsq сравнивают слова, длинные слова и четверные слова соответственно.</p>
+<p>Инструкции cmps интересны тем, что могут использоваться с префиксом rep, repe (repz) и repne (repnz). Например:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$str1</span>, %rsi
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$str2</span>, %edi
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$len</span>,  %rcx
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cld</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">rep</span><span style="color:#a6e22e">e</span> <span style="color:#66d9ef">cmpsb</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">jne</span> <span style="color:#66d9ef">not_equal</span>
+</span></span></code></pre></div><p>Префикс rep повторяет инструкцию заданное в регистре rcx количество раз. Префиксы repz и repnz делают то же самое, но только после каждого выполнения инструкции дополнительно проверяется ZF. Цикл прерывается, если ZF = 0 в случае c repz и если ZF = 1 в случае с repnz. Таким образом, приведенный выше код проверяет равенство двух буферов одинакового размера.</p>
+<p>Аналогичные инструкции movs перекладывает данные из буфера, адрес которого указан в rsi, в буфер, адрес которого указан в rdi (легко запомнить — rsi значит source, rdi значит destination). Инструкции stos заполняет буфер по адресу из регистра rdi байтами из регистра rax (или eax, или ax, или al, в зависимости от конкретной инструкции). Инструкции lods делают обратное действие — копируют байты по указанному в rsi адресу в регистр rax. Наконец, инструкции scas ищут байты из регистра rax (или соответствующих регистров меньшего размера) в буфере, адрес которого указан в rdi. Как и cmps, все эти инструкции работают с префиксами rep, repz и repnz.</p>
+<p>На базе этих инструкций легко реализуются процедуры memcmp, memcpy, strcmp и подобные. Интересно, что, например, для обнуления памяти инженеры Intel рекомендуют использовать на современных процессорах rep stosb, то есть, обнулять побайтово, а не, скажем, четверными словами.</p>
+<h2 id="работа-со-стеком-и-процедуры">Работа со стеком и процедуры</h2>
+<p>Со стеком все очень просто. Инструкция push кладет свой аргумент на стек, а инструкция pop извлекает значение со стека. Например, если временно забыть про инструкцию xchg, то поменять местами значение двух регистров можно так:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">push</span> %rax
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">mov</span> %rcx, %rax
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pop</span> %rcx
+</span></span></code></pre></div><p>Существуют инструкции, помещающие на стек и извлекающие с него регистр rflags / eflags:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">pushf</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># делаем что-то, что меняет флаги
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">popf</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># флаги восстановлены, самое время сделать jcc
+</span></span></span></code></pre></div><p>А так, к примеру, можно получить значение флага CF:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">pushf</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pop</span> %rax
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">and</span> <span style="color:#66d9ef">$1</span>, %rax
+</span></span></code></pre></div><p>На x86 также существуют инструкции pusha и popa, сохраняющие на стеке и восстанавливающие с него значения всех регистров. В x64 этих инструкций больше нет. Видимо, потому что регистров стало больше и сами регистры теперь длиннее — сохранять и восстанавливать их все стало сильно дороже.</p>
+<p>Процедуры, как правило, «создаются» при помощи инструкций call и ret. Инструкция call кладет на стек адрес следующей инструкции и передает управление по указанному в аргументе адресу. Инструкция ret читает со стека адрес возврата и передает по нему управление. Например:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span>someproc:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># типичный пролог процедуры
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e"># для примера выделяем 0x10 байт на стеке под локальные переменные
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e"># rbp - указатель на фрейм стека
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">push</span> %rbp
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> %rsp, %rbp
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">sub</span> <span style="color:#66d9ef">$0x10</span>, %rsp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># тут типа какие-то вычисления ...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$1</span>, %rax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># типичный эпилог процедуры
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">add</span> <span style="color:#66d9ef">$0x10</span>, %rsp
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">pop</span> %rbp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># выход из процедуры
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>_start:
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># как и в случае с jmp, адрес перехода может быть в регистре
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">call</span> <span style="color:#66d9ef">someproc</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">test</span> %rax, %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">jnz</span> <span style="color:#66d9ef">error</span>
+</span></span></code></pre></div><p><em>Примечание</em>: Аналогичный пролог и эпилог можно написать при помощи инструкций enter $0x10, $0 и leave. Но в наше время эти инструкции используются редко, так как они выполняются медленнее из-за дополнительной поддержки вложенных процедур.</p>
+<p>Как правило, возвращаемое значение передается в регистре rax или, если его размера не достаточно, записывается в структуру, адрес которой передается в качестве аргумента. К вопросу о передаче аргументов. Соглашений о вызовах существует великое множество. В одних все аргументы всегда передаются через стек (отдельный вопрос — в каком порядке) и за очистку стека от аргументов отвечает сама процедура, в других часть аргументов передается через регистры, а часть через стек, и за очистку стека от аргументов отвечает вызывающая сторона, плюс множество вариантов посередине, с отдельными правилами касательно выравнивания аргументов на стеке, передачи this, если это ООП язык, и так далее. В общем случае для произвольно взятой архитектуры, компилятора и языка программирования соглашение о вызовах может быть вообще каким угодно.</p>
+<p>Для примера рассмотрим ассемблерный код, сгенерированный CLang 3.8 для простой программки на языке C под x64. Так выглядит одна из процедур:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">hash</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>data, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">size_t</span> data_len) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> hash <span style="color:#f92672">=</span> <span style="color:#ae81ff">0x4841434B</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> data_len; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>    hash <span style="color:#f92672">=</span> ((hash <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">+</span> hash) <span style="color:#f92672">+</span> data[i];
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> hash;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Дизассемблерный листинг (при компиляции с -O0, комментарии мои):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span># типичный пролог процедуры
+</span></span><span style="display:flex;"><span># регистр rsp не изменяется, так как процедура не вызывает никаких
+</span></span><span style="display:flex;"><span># других процедур
+</span></span><span style="display:flex;"><span>  400950: 55                    push   %rbp
+</span></span><span style="display:flex;"><span>  400951: 48 89 e5              mov    %rsp,%rbp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># инициализация локальных переменных:
+</span></span><span style="display:flex;"><span># -0x08(%rbp) - const unsigned char *data (8 байт)
+</span></span><span style="display:flex;"><span># -0x10(%rbp) - const size_t data_len (8 байт)
+</span></span><span style="display:flex;"><span># -0x14(%rbp) - unsigned int hash (4 байта)
+</span></span><span style="display:flex;"><span># -0x18(%rbp) - int i (4 байта)
+</span></span><span style="display:flex;"><span>  400954: 48 89 7d f8           mov    %rdi,-0x8(%rbp)
+</span></span><span style="display:flex;"><span>  400958: 48 89 75 f0           mov    %rsi,-0x10(%rbp)
+</span></span><span style="display:flex;"><span>  40095c: c7 45 ec 4b 43 41 48  movl   $0x4841434b,-0x14(%rbp)
+</span></span><span style="display:flex;"><span>  400963: c7 45 e8 00 00 00 00  movl   $0x0,-0x18(%rbp)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># rax := i. если достигли data_len, выходим из цикла
+</span></span><span style="display:flex;"><span>  40096a: 48 63 45 e8           movslq -0x18(%rbp),%rax
+</span></span><span style="display:flex;"><span>  40096e: 48 3b 45 f0           cmp    -0x10(%rbp),%rax
+</span></span><span style="display:flex;"><span>  400972: 0f 83 28 00 00 00     jae    4009a0 &lt;hash+0x50&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># eax := (hash &lt;&lt; 5) + hash
+</span></span><span style="display:flex;"><span>  400978: 8b 45 ec              mov    -0x14(%rbp),%eax
+</span></span><span style="display:flex;"><span>  40097b: c1 e0 05              shl    $0x5,%eax
+</span></span><span style="display:flex;"><span>  40097e: 03 45 ec              add    -0x14(%rbp),%eax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># eax += data[i]
+</span></span><span style="display:flex;"><span>  400981: 48 63 4d e8           movslq -0x18(%rbp),%rcx
+</span></span><span style="display:flex;"><span>  400985: 48 8b 55 f8           mov    -0x8(%rbp),%rdx
+</span></span><span style="display:flex;"><span>  400989: 0f b6 34 0a           movzbl (%rdx,%rcx,1),%esi
+</span></span><span style="display:flex;"><span>  40098d: 01 f0                 add    %esi,%eax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># hash := eax
+</span></span><span style="display:flex;"><span>  40098f: 89 45 ec              mov    %eax,-0x14(%rbp)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># i++ и перейти к началу цикла
+</span></span><span style="display:flex;"><span>  400992: 8b 45 e8              mov    -0x18(%rbp),%eax
+</span></span><span style="display:flex;"><span>  400995: 83 c0 01              add    $0x1,%eax
+</span></span><span style="display:flex;"><span>  400998: 89 45 e8              mov    %eax,-0x18(%rbp)
+</span></span><span style="display:flex;"><span>  40099b: e9 ca ff ff ff        jmpq   40096a &lt;hash+0x1a&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># возвращаемое значение (hash) кладется в регистр eax
+</span></span><span style="display:flex;"><span>  4009a0: 8b 45 ec              mov    -0x14(%rbp),%eax
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span># типичный эпилог
+</span></span><span style="display:flex;"><span>  4009a3: 5d                    pop    %rbp
+</span></span><span style="display:flex;"><span>  4009a4: c3                    retq
+</span></span></code></pre></div><p>Здесь мы встретили две новые инструкции — movs и movz. Они работают точно так же, как mov, только расширяют один операнд до размера второго, знаково и беззнаково соответственно. Например, инструкция movzbl (%rdx,%rcx,1),%esi читайт байт (b) по адресу (%rdx,%rcx,1), расширяет его в длинное слово (l) путем добавления в начало нулей (z) и кладет результат в регистр esi.</p>
+<p>Как видите, два аргумента были переданы процедуре через регистры rdi и rsi. По всей видимости, используется конвенция под названием System V AMD64 ABI. Утверждается, что это стандарт де-факто под x64 на unix.</p>
+<h2 id="заключение">Заключение</h2>
+<p>Само собой разумеется, в рамках одной статьи, описать весь ассемблер x86/x64 не представляется возможным (более того, я не уверен, что сам знаю его прямо таки весь). Как минимум, за кадром остались такие темы, как операции над числами с плавающей точкой, MMX-, SSE- и AVX-инструкции, а также всякие экзотические инструкции вроде lidt, lgdt, bswap, rdtsc, cpuid, movbe, xlatb, или prefetch. Я постараюсь осветить их в следующих статьях, но ничего не обещаю. Следует также отметить, что в выводе objdump -d для большинства реальных программ вы очень редко увидите что-то помимо описанного выше.</p>
+<p>Еще интересный топик, оставшийся за кадром — это атомарные операции, барьеры памяти, спинлоки и вот это все. Например, compare and swap часто реализуется просто как инструкция cmpxchg с префиксом lock. По аналогии реализуется атомарный инкремент, декремент, и прочее. Увы, все это тянет на тему для отдельной статьи.</p>
+<p>В качестве источников дополнительной информации можно рекомендовать книгу Modern X86 Assembly Language Programming, и, конечно же, мануалы от Intel. Также довольно неплоха книга x86 Assembly на wikibooks.org.</p>
+<p>Из онлайн-справочников по ассемблерным инструкциям стоит обратить внимание на следующие:</p>
+<ul>
+<li><a href="http://ref.x86asm.net/">x86 ASM Refernces</a></li>
+<li><a href="http://www.felixcloutier.com/x86/">Felix Cloutier x86</a></li>
+<li><a href="http://x86.renejeschke.de/">x86 renejeschke</a></li>
+<li><a href="https://en.wikipedia.org/wiki/X86_instruction_listings">EN Wiki x86 instructions</a></li>
+</ul>
+
+</article>
+</div>
+
+
+                
+                    
+                
+            </div>
+<footer>
+    <article>Copyright © 2023 by OkulusDev</article>
+</footer>
+
+</main>
+    </body>
+</html>
