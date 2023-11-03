@@ -6,7 +6,18 @@
     <description>Recent content in assembly on Okulus Dev</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ru</language>
-    <lastBuildDate>Fri, 03 Nov 2023 19:06:04 +0700</lastBuildDate><atom:link href="https://okulusdev.github.io/tags/assembly/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 03 Nov 2023 19:10:25 +0700</lastBuildDate><atom:link href="https://okulusdev.github.io/tags/assembly/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Что такое ассемблер</title>
+      <link>https://okulusdev.github.io/post/whats_assembly/</link>
+      <pubDate>Fri, 03 Nov 2023 19:10:25 +0700</pubDate>
+      
+      <guid>https://okulusdev.github.io/post/whats_assembly/</guid>
+      <description>Что такое ассемблер? Язык ассемблера (от англ. assembly language) — это императивный язык низкого уровня, который используется для представления команд CPU. При этом команды процессора остаются читабельными для программиста. Под термином &amp;ldquo;ассемблер&amp;rdquo; также может подразумеваться ПО, которое преобразует соответствующий исходный код в машинный код. Обратный процесс (конвертация машинного кода в ассемблер-код) выполняет дизассемблер.
+Простыми словами, язык ассемблера — это низкоуровневый язык, позволяющий программисту обращаться непосредственно к процессору машины.
+Как работает язык ассемблера Это самый низкоуровневый человекочитаемый язык программирования.</description>
+    </item>
+    
     <item>
       <title>Основные инструкции ассемблера x86_64</title>
       <link>https://okulusdev.github.io/post/assembly_basic/</link>

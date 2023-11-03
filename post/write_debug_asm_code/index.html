@@ -234,90 +234,90 @@
 <p>Наконец, язык ассемблера отличается в зависимости от архитектуры процессора. Пока что мы сосредоточимся на ассемблере для x86 (он же i386) и x64 (он же amd64), так как именно с этими архитектурами приходится чаще всего иметь дело. Впрочем, ARM тоже весьма распространен, главным образом на телефонах и планшетах. Еще из сравнительно популярного есть SPARC и PowerPC, но шансы столкнуться с ними весьма малы. Отмечу, что x86 и x64 можно было бы рассматривать отдельно, но эти архитектуры во многом похожи, поэтому я не вижу в этом большого смысла.</p>
 <h2 id="hello-world">Hello World</h2>
 <p>Рассмотрим типичный «Hello, world» для архитектуры x86 и Linux:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">.data</span>
-</span></span><span style="display:flex;"><span>msg:
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.ascii</span> <span style="color:#e6db74">&#34;Hello, world!\n&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.set</span> <span style="color:#66d9ef">len</span>, . - <span style="color:#66d9ef">msg</span>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.data</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">msg:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26;font-weight:bold">.ascii</span> <span style="color:#b8bb26">&#34;Hello, world!\n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26;font-weight:bold">.set</span> <span style="color:#d3869b">len</span>, . - <span style="color:#d3869b">msg</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.text</span>
+</span></span><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.text</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
-</span></span><span style="display:flex;"><span>_start:
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># write
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$4</span>,   %eax
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$1</span>,   %ebx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$msg</span>, %ecx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$len</span>, %edx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">int</span> <span style="color:#66d9ef">$0x80</span>
+</span></span><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.globl</span> <span style="color:#d3869b">_start</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">_start:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic"># write
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>  <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">$4</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">$1</span>,   %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">$msg</span>, %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">$len</span>, %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">int</span> <span style="color:#d3869b">$0x80</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># exit
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span> <span style="color:#66d9ef">$1</span>,   %eax
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">xor</span> %ebx, %ebx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">int</span> <span style="color:#66d9ef">$0x80</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic"># exit
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>  <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">$1</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">xor</span> %ebx, %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">int</span> <span style="color:#d3869b">$0x80</span>
 </span></span></code></pre></div><h3 id="компиляция">Компиляция</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Или: gcc -m32 -c hello-int80.s</span>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#928374;font-style:italic"># Или: gcc -m32 -c hello-int80.s</span>
 </span></span><span style="display:flex;"><span>as --32 helloworld.s -o helloworld.o
 </span></span><span style="display:flex;"><span>ld -melf_i386 -s helloworld.o -o helloworld
 </span></span></code></pre></div><h2 id="выполнение-системного-вызова-через-sysenter">Выполнение системного вызова через sysenter</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">.data</span>
-</span></span><span style="display:flex;"><span>msg:
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.ascii</span> <span style="color:#e6db74">&#34;Hello, world!\n&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">len</span> <span style="color:#960050;background-color:#1e0010">=</span> . - <span style="color:#66d9ef">msg</span>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.data</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">msg:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26;font-weight:bold">.ascii</span> <span style="color:#b8bb26">&#34;Hello, world!\n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">len</span> = . - <span style="color:#d3869b">msg</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.text</span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
+</span></span><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.text</span>
+</span></span><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.globl</span> <span style="color:#d3869b">_start</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>_start:
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># write
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$4</span>,   %eax
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$1</span>,   %ebx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$msg</span>, %ecx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$len</span>, %edx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  <span style="color:#66d9ef">$write_ret</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ecx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %edx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ebp
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   %esp, %ebp
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">sysenter</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">_start:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic"># write
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>  <span style="color:#fabd2f">mov</span>   <span style="color:#d3869b">$4</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>   <span style="color:#d3869b">$1</span>,   %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>   <span style="color:#d3869b">$msg</span>, %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>   <span style="color:#d3869b">$len</span>, %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  <span style="color:#d3869b">$write_ret</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>   %esp, %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">sysenter</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>write_ret:
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># exit
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>   <span style="color:#66d9ef">$1</span>,   %eax
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">xor</span>   %ebx, %ebx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  <span style="color:#66d9ef">$exit_ret</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ecx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %edx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">push</span>  %ebp
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>   %esp, %ebp
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">sysenter</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">write_ret:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic"># exit
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>  <span style="color:#fabd2f">mov</span>   <span style="color:#d3869b">$1</span>,   %eax
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">xor</span>   %ebx, %ebx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  <span style="color:#d3869b">$exit_ret</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  %ecx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  %edx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">push</span>  %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>   %esp, %ebp
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">sysenter</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>exit_ret:
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">exit_ret:</span>
 </span></span></code></pre></div><p>Сборка осуществляется аналогично сборке предыдущего примера.</p>
 <p>Как видите, принцип тот же, что при использовании int 0x80, только перед выполнением sysenter требуются поместить в стек адрес, по которому следует вернуть управление, а также совершить кое-какие дополнительные манипуляции с регистрами. Причины этого более подробно <a href="http://reverseengineering.stackexchange.com/a/2894/16763">объясняются здесь</a></p>
 <p>Инструкция sysenter работает быстрее int 0x80 и является предпочтительным способом совершения системных вызовов на x86.</p>
 <h2 id="выполнение-системного-вызова-через-syscall">Выполнение системного вызова через syscall</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#a6e22e">.data</span>
-</span></span><span style="display:flex;"><span>msg:
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.ascii</span> <span style="color:#e6db74">&#34;Hello, world!\n&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">.set</span> <span style="color:#66d9ef">len</span>, . - <span style="color:#66d9ef">msg</span>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.data</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">msg:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26;font-weight:bold">.ascii</span> <span style="color:#b8bb26">&#34;Hello, world!\n&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#b8bb26;font-weight:bold">.set</span> <span style="color:#d3869b">len</span>, . - <span style="color:#d3869b">msg</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.text</span>
+</span></span><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.text</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">.globl</span> <span style="color:#66d9ef">_start</span>
-</span></span><span style="display:flex;"><span>_start:
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># write
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$1</span>,   %rax
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$1</span>,   %rdi
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$msg</span>, %rsi
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$len</span>, %rdx
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">syscall</span>
+</span></span><span style="display:flex;"><span><span style="color:#b8bb26;font-weight:bold">.globl</span> <span style="color:#d3869b">_start</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">_start:</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic"># write
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>  <span style="color:#fabd2f">mov</span>  <span style="color:#d3869b">$1</span>,   %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>  <span style="color:#d3869b">$1</span>,   %rdi
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>  <span style="color:#d3869b">$msg</span>, %rsi
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">mov</span>  <span style="color:#d3869b">$len</span>, %rdx
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">syscall</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># exit
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">mov</span>  <span style="color:#66d9ef">$60</span>, %rax
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">xor</span>  %rdi, %rdi
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">syscall</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#928374;font-style:italic"># exit
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>  <span style="color:#fabd2f">mov</span>  <span style="color:#d3869b">$60</span>, %rax
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">xor</span>  %rdi, %rdi
+</span></span><span style="display:flex;"><span>  <span style="color:#fabd2f">syscall</span>
 </span></span></code></pre></div><p>Компиляция производится так:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>as --64 hello-syscall.s -o hello-syscall.o
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>as --64 hello-syscall.s -o hello-syscall.o
 </span></span><span style="display:flex;"><span>ld -melf_x86_64 -s hello-syscall.o -o hello-syscall
 </span></span></code></pre></div><p>Принцип все тот же, но есть важные отличия. Номера системных вызовов нужно брать из unistd_64.h, а не из unistd_32.h. Как видите, они совершенно другие. Так как это 64-х битный код, то и регистры мы используем 64-х битные. Номер системного вызова помещается в rax. До шести аргументов передается через регистры rdi, rsi, rdx, r10, r8 и r9. Возвращаемое значение помещается в регистр rax. Значения, сохраненные в остальных регистрах, при возвращении из системного вызова остаются прежними, за исключением регистров rcx и r11.</p>
 <p>Интересно, что в программе под x64 можно одновременно использовать системные вызовы как через syscall, так и через int 0x80.</p>
@@ -343,7 +343,7 @@ set $r15 = 0x123
 </code></pre><p>Наконец, стектрейсы нам тоже недоступны. Но ничто не мешает, например, посмотреть 8 ближайших значений на стеке:</p>
 <p><code>x/8g $sp</code></p>
 <p>По большому счету, это все отличие от отладки программы на C при наличии исходников. Кстати, вы можете легко посмотреть, в какой ассемблерных код транслируется ваш код на C, одним из следующих способов:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gcc -S test.c -o -
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gcc -S test.c -o -
 </span></span><span style="display:flex;"><span>objdump -d ./myprog
 </span></span></code></pre></div><p>Как альтернативный вариант, можно воспользоваться Hopper или подобным интерактивным дизассемблером.</p>
 <p>Внезапно отладка программы, собранной без -g и/или с -O2, перестала казаться таким уж страшным делом, не так ли?</p>
