@@ -19,7 +19,7 @@
     <meta charset="utf-8">
     <link rel="shortcut icon" href='https://okulusdev.github.io/favicon.ico' type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Putsf Review - Okulus Dev</title>
+    <title>PutsF: Альтернатива printf для C - Okulus Dev</title>
 
     
 
@@ -30,19 +30,25 @@
     
 
     
-        <meta property="og:title" content="Putsf Review" />
-<meta property="og:description" content="" />
+        <meta property="og:title" content="PutsF: Альтернатива printf для C" />
+<meta property="og:description" content="PutsF - альтернатива printf Это небольшая библиотека на ассемблере (компилятор FASM), реализация printf из stdlib, для C
+Установка Эта программа есть в моем гитхаб репозитории
+Код написан для 64 битной linux системы (ELF 64). Если у вас другая, вам придется редактировать код, указывать другой формат, если у вас и разрядность другая - то изменять имена регистров.
+Также у вас должен быть установлен gnu-линковщик, fasm (flat assembly) и система сборки make." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://okulusdev.github.io/post/putsf-review/" /><meta property="article:section" content="post" />
 <meta property="article:published_time" content="2023-11-03T19:14:54+07:00" />
-<meta property="article:modified_time" content="2023-11-03T19:14:54+07:00" />
+<meta property="article:modified_time" content="2023-11-03T19:15:30+07:00" />
 
     
 
     
         <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Putsf Review"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="PutsF: Альтернатива printf для C"/>
+<meta name="twitter:description" content="PutsF - альтернатива printf Это небольшая библиотека на ассемблере (компилятор FASM), реализация printf из stdlib, для C
+Установка Эта программа есть в моем гитхаб репозитории
+Код написан для 64 битной linux системы (ELF 64). Если у вас другая, вам придется редактировать код, указывать другой формат, если у вас и разрядность другая - то изменять имена регистров.
+Также у вас должен быть установлен gnu-линковщик, fasm (flat assembly) и система сборки make."/>
 
     <link rel="stylesheet" href="/style.min.fae245b6ce34259555eab2b011d31eb69cfeb04f46398e9c82df62439ad6edea66fa04d14a95b4bbf3ce9679be82b4badfed247f9962c2af62f53d0f389b424f.css" integrity="sha512-&#43;uJFts40JZVV6rKwEdMetpz&#43;sE9GOY6cgt9iQ5rW7epm&#43;gTRSpW0u/POlnm&#43;grS63&#43;0kf5liwq9i9T0POJtCTw==">
 
@@ -76,6 +82,13 @@
 
 
 
+
+    
+        
+        
+            <script defer src="/js/builtin-copy.56e07a74dd440b068ab36af35542ed8960865686c19fb809f38436877ac081570612cc8a913650b0c0e3073a336680c5df960e73bf7b1de83dc6aa996f2db858.js" integrity="sha512-VuB6dN1ECwaKs2rzVULtiWCGVobBn7gJ84Q2h3rAgVcGEsyKkTZQsMDjBzozZoDF35YOc797Heg9xqqZby24WA=="></script>
+        
+    
 
 
 
@@ -182,7 +195,429 @@
     <ul></ul>
 </div><div id="content" class="content-margin">
                 
+    
+    <details class="collapsible-menu-wrapper"><summary class="collapsible-menu-type"><span>Table of contents</span></summary><div class="collapsible-menu">
+        
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#установка">Установка</a></li>
+    <li><a href="#код-putsfasm">Код putsf.asm</a></li>
+    <li><a href="#код-puts_charasm">Код puts_char.asm</a></li>
+    <li><a href="#код-puts_stringasm">Код puts_string.asm</a></li>
+    <li><a href="#код-puts_decimalasm">Код puts_decimal.asm</a></li>
+    <li><a href="#код-c_exitasm">Код c_exit.asm</a></li>
+    <li><a href="#код-c_putsfasm">Код c_putsf.asm</a></li>
+    <li><a href="#код-примера-работы-на-c">Код примера работы на C</a></li>
+    <li><a href="#makefile">Makefile</a>
+      <ul>
+        <li><a href="#ставьте-звезды-на-гитхабе-спасибо-за-прочтение">Ставьте звезды на гитхабе, спасибо за прочтение!</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        
+    </div></details>
 
+
+
+    <div class="content-margin">
+
+
+
+<article class="line-numbers">
+    
+    
+    <h1 id="putsf---альтернатива-printf">PutsF - альтернатива printf</h1>
+<p>Это небольшая библиотека на ассемблере (компилятор FASM), реализация printf из stdlib, для C</p>
+<h2 id="установка">Установка</h2>
+<p>Эта программа есть в <a href="https://github.com/OkulusDev/asm-putsf">моем гитхаб репозитории</a></p>
+<p>Код написан для 64 битной linux системы (ELF 64). Если у вас другая, вам придется редактировать код, указывать другой формат, если у вас и разрядность другая - то изменять имена регистров.</p>
+<p>Также у вас должен быть установлен gnu-линковщик, fasm (flat assembly) и система сборки make.</p>
+<p>Если у вас возникли сложности или вопросы по использованию Metalfish OS, создайте
+<a href="https://github.com/OkulusDev/asm-putsf/issues/new/choose">обсуждение</a> в данном репозитории или напишите на электронную почту <a href="mailto:bro.alexeev@gmail.com">bro.alexeev@gmail.com</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#928374;font-style:italic"># Клонирование репозитория</span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/OkulusDev/asm-putsf.git
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">cd</span> asm-putsf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"># компиляция и линковка</span>
+</span></span><span style="display:flex;"><span>make build clean
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"># запуск</span>
+</span></span><span style="display:flex;"><span>make run
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#fe8019">typedef</span> <span style="color:#fabd2f">long</span> <span style="color:#fabd2f">long</span> <span style="color:#fabd2f">int</span> <span style="color:#fabd2f">int64_t</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fe8019">extern</span> <span style="color:#fabd2f">void</span> <span style="color:#fabd2f">c_exit</span>(<span style="color:#fabd2f">int</span> ret);
+</span></span><span style="display:flex;"><span><span style="color:#fe8019">extern</span> <span style="color:#fabd2f">int64_t</span> <span style="color:#fabd2f">c_putsf</span>(<span style="color:#fabd2f">char</span> <span style="color:#fe8019">*</span>fmt, ...);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">void</span> <span style="color:#fabd2f">_start</span>(<span style="color:#fabd2f">void</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">char</span> <span style="color:#fe8019">*</span>string <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;PutsF&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">int64_t</span> decimal <span style="color:#fe8019">=</span> <span style="color:#d3869b">123</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">char</span> symbol <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#39;!&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">int64_t</span> ret <span style="color:#fe8019">=</span> <span style="color:#fabd2f">c_putsf</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#b8bb26">&#34;{ %s, %d, %c }</span><span style="color:#b8bb26">\n</span><span style="color:#b8bb26">&#34;</span>,
+</span></span><span style="display:flex;"><span>        string, decimal, symbol
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">c_putsf</span>(<span style="color:#b8bb26">&#34;%d</span><span style="color:#b8bb26">\n</span><span style="color:#b8bb26">&#34;</span>, ret); <span style="color:#928374;font-style:italic">// print 3
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">c_exit</span>(<span style="color:#d3869b">0</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Вот флаги для компилятора gcc: <code>gcc -nostdlib -o &lt;нелинкованные файлы) -o &lt;main.c&gt;</code></p>
+<p>Компиляция в Makefile:</p>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>fasm src/putsf.asm bin/putsf.o
+</span></span><span style="display:flex;"><span>fasm src/c_putsf.asm bin/c_putsf.o
+</span></span><span style="display:flex;"><span>fasm src/c_exit.asm bin/c_exit.o
+</span></span><span style="display:flex;"><span>gcc -nostdlib -o bin/putsf.bin bin/putsf.o bin/c_putsf.o bin/c_exit.o bin/putsf_example.c
+</span></span></code></pre></div><h2 id="код-putsfasm">Код putsf.asm</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; -----------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  ASM PUTSF Source Code
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  File: putsf.asm
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  Title: Работа кода putsf
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  Last Change Date: 2 November 2023, 14:10 (UTC)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  Author: Okulus Dev
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  License: GNU GPL v3
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; -----------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Description: 
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;   putsf - это альтернатива printf. PutsF минималичстичный, ограниченн символами
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  %c, %s, %d и %%. 
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;   TODO: добавить реализации с %f (плавающие числа), %x (hex, 16-ые числа)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; -----------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">format</span> <span style="color:#d3869b">ELF64</span>							<span style="color:#928374;font-style:italic">; указываем 64 битный линуксовый формат
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; 64-битный формат означает, что ко всем регистрам будем добавлять букву r
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; (например rax вместо ax). Буква R означает, что регистр 64-битный.
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Регистры бывают разных типов: AH, AL, AX, EAX, RAX - это все один регистр.
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  + RAX - 64 битный (8 байт)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  + EAX - 32 битный (4 байта)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  + AX - 16 битный (2 байта)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  + AH, AL - 8 байтные (1 байт)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Регистр RAX это дополнение EAX, EAX это дополнение AX, AX это дополнение 2
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; регистров AH и AL
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">include</span> &#34;<span style="color:#d3869b">puts_decimal.asm</span>&#34;
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">include</span> &#34;<span style="color:#d3869b">puts_string.asm</span>&#34;
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">include</span> &#34;<span style="color:#d3869b">puts_char.asm</span>&#34;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">public</span> <span style="color:#d3869b">putsf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">section</span> &#39;<span style="color:#d3869b">.putsf</span>&#39; <span style="color:#d3869b">executable</span>				<span style="color:#928374;font-style:italic">; секция putsf
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Ввод:
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  rax = format (rax = формат)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  stack = values (stack = значения)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Вывод:
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  rax = число, количество
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span><span style="color:#fb4934">putsf:</span>									<span style="color:#928374;font-style:italic">; метка putsf
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; Логика довольно простая, т.к. основные алгоритмы выполнены
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; Алгоритм:
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 1. Прочитать i символ в строке
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 2. Если символ равен %, тогда перейти на пункт 6
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 3. Если символ равен нулю, тогда завершить выполнение
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 4. Иначе, напечатать i символ
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 5. Инкрементировать значение i (i++)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 6. Перейти на пункт 1
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 7. Инкрементировать значение i (i++)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 8. Если i символ равен %, тогда напечатать его
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 9. Если i символ равен d, тогда взять из стека значение и напечатать число
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>   	<span style="color:#928374;font-style:italic">; 10. Если i символ равен s, тогда взять из стека значение и напечатать строку 	
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 11. Если i символ равен c, тогда взять из стека значение и напечатать символ
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 12. Иначе, вернуть ошибку и перейти на пункт 3
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 13. Инкрементировать значение i
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 14. Перейти на пункт 1
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#fabd2f">push</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#928374;font-style:italic">; call/ret    = 8byte
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>    <span style="color:#928374;font-style:italic">; rax+rbx+rcx = 24byte
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>    <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rbx</span>, <span style="color:#d3869b">32</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#928374;font-style:italic">; count of format elements
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>    <span style="color:#fabd2f">xor</span> <span style="color:#d3869b">rcx</span>, <span style="color:#d3869b">rcx</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#d3869b">.next_iter</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">cmp</span> [<span style="color:#d3869b">rax</span>], <span style="color:#d3869b">byte</span> <span style="color:#d3869b">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.close</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">cmp</span> [<span style="color:#d3869b">rax</span>], <span style="color:#d3869b">byte</span> &#39;%&#39;
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.special_char</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.default_char</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fb4934">.special_char:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">inc</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">cmp</span> [<span style="color:#d3869b">rax</span>], <span style="color:#d3869b">byte</span> &#39;<span style="color:#d3869b">s</span>&#39;
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.print_string</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">cmp</span> [<span style="color:#d3869b">rax</span>], <span style="color:#d3869b">byte</span> &#39;<span style="color:#d3869b">d</span>&#39;
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.print_decimal</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">cmp</span> [<span style="color:#d3869b">rax</span>], <span style="color:#d3869b">byte</span> &#39;<span style="color:#d3869b">c</span>&#39;
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.print_char</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">cmp</span> [<span style="color:#d3869b">rax</span>], <span style="color:#d3869b">byte</span> &#39;%&#39;
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.default_char</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.is_error</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fb4934">.print_string:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, [<span style="color:#d3869b">rsp</span>+<span style="color:#d3869b">rbx</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">call</span> <span style="color:#d3869b">puts_string</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.shift_stack</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fb4934">.print_decimal:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, [<span style="color:#d3869b">rsp</span>+<span style="color:#d3869b">rbx</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">call</span> <span style="color:#d3869b">puts_decimal</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.shift_stack</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fb4934">.print_char:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, [<span style="color:#d3869b">rsp</span>+<span style="color:#d3869b">rbx</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">call</span> <span style="color:#d3869b">puts_char</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.shift_stack</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fb4934">.default_char:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, [<span style="color:#d3869b">rax</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">call</span> <span style="color:#d3869b">puts_char</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.next_step</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fb4934">.shift_stack:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">inc</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">add</span> <span style="color:#d3869b">rbx</span>, <span style="color:#d3869b">8</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fb4934">.next_step:</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">inc</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.next_iter</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">.is_error:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rcx</span>, -<span style="color:#d3869b">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">.close:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">ret</span>
+</span></span></code></pre></div><h2 id="код-puts_charasm">Код puts_char.asm</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;; puts_char.asm
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Вывод символа
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">section</span> &#39;<span style="color:#d3869b">.puts_char</span>&#39; <span style="color:#d3869b">executable</span>			<span style="color:#928374;font-style:italic">; секция вывода символа
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Ввод:
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  rax = char (регистр rax = символ)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span><span style="color:#fb4934">puts_char:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rsi</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rdi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rsi</span>, <span style="color:#d3869b">rsp</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rdi</span>, <span style="color:#d3869b">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rdx</span>, <span style="color:#d3869b">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, <span style="color:#d3869b">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">call</span> <span style="color:#d3869b">do_syscall</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rdi</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rsi</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">ret</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">section</span> &#39;<span style="color:#d3869b">.do_syscall</span>&#39; <span style="color:#d3869b">executable</span>		<span style="color:#928374;font-style:italic">; секция сисвызова
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span><span style="color:#fb4934">do_syscall:</span>								<span style="color:#928374;font-style:italic">; метка сисвызова
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#fabd2f">push</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fabd2f">push</span> <span style="color:#d3869b">r11</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fabd2f">syscall</span>
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	<span style="color:#fabd2f">pop</span> <span style="color:#d3869b">r11</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fabd2f">ret</span>
+</span></span></code></pre></div><h2 id="код-puts_stringasm">Код puts_string.asm</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;; puts_string.asm
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Вывод строки
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">section</span> &#39;<span style="color:#d3869b">.puts_string</span>&#39; <span style="color:#d3869b">executable</span>		<span style="color:#928374;font-style:italic">; секция вывода строки
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Ввод:
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  rax = string (регистр rax = строка для вывода)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span><span style="color:#fb4934">puts_string:</span>							<span style="color:#928374;font-style:italic">; метка вывода строки
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#fabd2f">push</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fabd2f">xor</span> <span style="color:#d3869b">rbx</span>, <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fb4934">.next_iter:</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">cmp</span> [<span style="color:#d3869b">rax</span>+<span style="color:#d3869b">rbx</span>], <span style="color:#d3869b">byte</span> <span style="color:#d3869b">0</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">je</span> <span style="color:#d3869b">.close</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, [<span style="color:#d3869b">rax</span>+<span style="color:#d3869b">rbx</span>]
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">call</span> <span style="color:#d3869b">puts_char</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">inc</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.next_iter</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fb4934">.close:</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#fabd2f">ret</span>
+</span></span></code></pre></div><h2 id="код-puts_decimalasm">Код puts_decimal.asm</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;; pust_decimal.asm
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Вывод 64 битного числа
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">section</span> &#39;<span style="color:#d3869b">.puts_decimal</span>&#39; <span style="color:#d3869b">executable</span>		<span style="color:#928374;font-style:italic">; секция вывода числа
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Ввод:
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  rax - число
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span><span style="color:#fb4934">puts_decimal:</span>							<span style="color:#928374;font-style:italic">; метка вывода числа
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; Стоит учитывать, что данная метка работает только с 64-битными числами, и
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; следовательно, и отрицательное число она будет трактовать если оно будет
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 64-битным. В противном случае, если число будет 32 битное, то оно со
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; стороны 64-битного числа будет трактоваться как unsigned (число без знака) 
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; Алгоритм:	
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 1. Если число меньше нуля, то напечать символ минус.
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 2. Разделить число на 10, взять частное и остаток от деления
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 3. Положить остаток в стек
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 4. Инкрементировать значение i (i++)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 5. Если частное не равно 0, тогда перейти на 2 пункт
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 6. Если значение i равно 0, тогда закрыть выполнение
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 7. Выгрузить число из стека (остаток)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 8. Привать к остатку символ &#39;0&#39; (число 48 по ASCII)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 9. Напечатать получившийся символ (puts_char)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 10. Декрементировать значение i (i--)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#928374;font-style:italic">; 11. Перейти на пункт 6
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>	<span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">xor</span> <span style="color:#d3869b">rcx</span>, <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">cmp</span> <span style="color:#d3869b">rax</span>, <span style="color:#d3869b">0</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>	<span style="color:#fabd2f">jl</span> <span style="color:#d3869b">.is_minus</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.next_iter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">.is_minus:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">neg</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, &#39;-&#39;
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">call</span> <span style="color:#d3869b">puts_char</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">.next_iter:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rbx</span>, <span style="color:#d3869b">10</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">xor</span> <span style="color:#d3869b">rdx</span>, <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">div</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">inc</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">cmp</span> <span style="color:#d3869b">rax</span>, <span style="color:#d3869b">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.puts_iter</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.next_iter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">.puts_iter:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">cmp</span> <span style="color:#d3869b">rcx</span>, <span style="color:#d3869b">0</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">je</span> <span style="color:#d3869b">.close</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">add</span> <span style="color:#d3869b">rax</span>, &#39;<span style="color:#d3869b">0</span>&#39;
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">call</span> <span style="color:#d3869b">puts_char</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">dec</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">jmp</span> <span style="color:#d3869b">.puts_iter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fb4934">.close:</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rbx</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rax</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#fabd2f">ret</span>
+</span></span></code></pre></div><h2 id="код-c_exitasm">Код c_exit.asm</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; c_exit.asm
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span><span style="color:#fabd2f">format</span> <span style="color:#d3869b">ELF64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">public</span> <span style="color:#d3869b">c_exit</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">section</span> &#39;<span style="color:#d3869b">.c_exit</span>&#39; <span style="color:#d3869b">executable</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">c_exit:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, <span style="color:#d3869b">60</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">syscall</span> 
+</span></span></code></pre></div><h2 id="код-c_putsfasm">Код c_putsf.asm</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-asm" data-lang="asm"><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; -----------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  ASM PUTSF Source Code
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  File: cputsf.asm
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  Title: Связка putsf с C
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  Last Change Date: 2 November 2023, 14:10 (UTC)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  Author: Okulus Dev
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  License: GNU GPL v3
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; -----------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; Description: 
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;   putsf - это альтернатива printf. PutsF минималичстичный, ограниченн символами
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;  %c, %s, %d и %%. 
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">;   TODO: добавить реализации с %f (плавающие числа), %x (hex, 16-ые числа)
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic">; -----------------------------------------------------------------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span><span style="color:#fabd2f">format</span> <span style="color:#d3869b">ELF64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">extrn</span> <span style="color:#d3869b">putsf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">public</span> <span style="color:#d3869b">c_putsf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">section</span> &#39;<span style="color:#d3869b">.c_putsf</span>&#39; <span style="color:#d3869b">executable</span>
+</span></span><span style="display:flex;"><span><span style="color:#fb4934">c_putsf:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">r10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">r9</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">r8</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">rsi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">mov</span> <span style="color:#d3869b">rax</span>, <span style="color:#d3869b">rdi</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">call</span> <span style="color:#d3869b">putsf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rsi</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rdx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">rcx</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">r8</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">pop</span> <span style="color:#d3869b">r9</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">push</span> <span style="color:#d3869b">r10</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#d3869b">ret</span> 
+</span></span></code></pre></div><h2 id="код-примера-работы-на-c">Код примера работы на C</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#fe8019">typedef</span> <span style="color:#fabd2f">long</span> <span style="color:#fabd2f">long</span> <span style="color:#fabd2f">int</span> <span style="color:#fabd2f">int64_t</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fe8019">extern</span> <span style="color:#fabd2f">void</span> <span style="color:#fabd2f">c_exit</span>(<span style="color:#fabd2f">int</span> ret);
+</span></span><span style="display:flex;"><span><span style="color:#fe8019">extern</span> <span style="color:#fabd2f">int64_t</span> <span style="color:#fabd2f">c_putsf</span>(<span style="color:#fabd2f">char</span> <span style="color:#fe8019">*</span>fmt, ...);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">void</span> <span style="color:#fabd2f">_start</span>(<span style="color:#fabd2f">void</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">char</span> <span style="color:#fe8019">*</span>string <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#34;PutsF&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">int64_t</span> decimal <span style="color:#fe8019">=</span> <span style="color:#d3869b">123</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">char</span> symbol <span style="color:#fe8019">=</span> <span style="color:#b8bb26">&#39;!&#39;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">int64_t</span> ret <span style="color:#fe8019">=</span> <span style="color:#fabd2f">c_putsf</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#b8bb26">&#34;{ %s, %d, %c }</span><span style="color:#b8bb26">\n</span><span style="color:#b8bb26">&#34;</span>,
+</span></span><span style="display:flex;"><span>        string, decimal, symbol
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">c_putsf</span>(<span style="color:#b8bb26">&#34;%d</span><span style="color:#b8bb26">\n</span><span style="color:#b8bb26">&#34;</span>, ret); <span style="color:#928374;font-style:italic">// 3
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#fabd2f">c_exit</span>(<span style="color:#d3869b">0</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="makefile">Makefile</h2>
+<div class="highlight"><pre tabindex="0" style="color:#ebdbb2;background-color:#282828;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-make" data-lang="make"><span style="display:flex;"><span><span style="color:#928374;font-style:italic"># Директории
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>SRC_DIR<span style="color:#fe8019">=</span>src
+</span></span><span style="display:flex;"><span>BIN_DIR<span style="color:#fe8019">=</span>bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"># Компиляторы, линковщики
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>ASM<span style="color:#fe8019">=</span>fasm
+</span></span><span style="display:flex;"><span>LD<span style="color:#fe8019">=</span>ld
+</span></span><span style="display:flex;"><span>C<span style="color:#fe8019">=</span>gcc
+</span></span><span style="display:flex;"><span>C_FLAGS<span style="color:#fe8019">=</span>-nostdlib
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"># Исходный код, бинарники, вывод
+</span></span></span><span style="display:flex;"><span><span style="color:#928374;font-style:italic"></span>CODE<span style="color:#fe8019">=</span>putsf.asm
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">.phony</span><span style="color:#fe8019">:</span> build clean run clean_all
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">build</span><span style="color:#fe8019">:</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#fe8019">$(</span>ASM<span style="color:#fe8019">)</span> <span style="color:#fe8019">$(</span>SRC_DIR<span style="color:#fe8019">)</span>/putsf.asm <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/putsf.o
+</span></span><span style="display:flex;"><span>	<span style="color:#fe8019">$(</span>ASM<span style="color:#fe8019">)</span> <span style="color:#fe8019">$(</span>SRC_DIR<span style="color:#fe8019">)</span>/c_putsf.asm <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/c_putsf.o
+</span></span><span style="display:flex;"><span>	<span style="color:#fe8019">$(</span>ASM<span style="color:#fe8019">)</span> <span style="color:#fe8019">$(</span>SRC_DIR<span style="color:#fe8019">)</span>/c_exit.asm <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/c_exit.o
+</span></span><span style="display:flex;"><span>	<span style="color:#fe8019">$(</span>C<span style="color:#fe8019">)</span> <span style="color:#fe8019">$(</span>C_FLAGS<span style="color:#fe8019">)</span> -o <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/putsf.bin <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/putsf.o <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/c_putsf.o <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/c_exit.o <span style="color:#fe8019">$(</span>SRC_DIR<span style="color:#fe8019">)</span>/putsf_example.c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">run</span><span style="color:#fe8019">:</span>
+</span></span><span style="display:flex;"><span>	./<span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/putsf.bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">clean</span><span style="color:#fe8019">:</span>
+</span></span><span style="display:flex;"><span>	rm <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/*.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#fabd2f">clean_all</span><span style="color:#fe8019">:</span>
+</span></span><span style="display:flex;"><span>	rm <span style="color:#fe8019">$(</span>BIN_DIR<span style="color:#fe8019">)</span>/*
+</span></span></code></pre></div><h3 id="ставьте-звезды-на-гитхабе-спасибо-за-прочтение">Ставьте звезды на гитхабе, спасибо за прочтение!</h3>
+
+</article>
+</div>
 
 
                 

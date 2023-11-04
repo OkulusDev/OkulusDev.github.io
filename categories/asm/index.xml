@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>asm on Okulus Dev</title>
+    <link>https://okulusdev.github.io/categories/asm/</link>
+    <description>Recent content in asm on Okulus Dev</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ru</language>
+    <lastBuildDate>Fri, 03 Nov 2023 19:14:54 +0700</lastBuildDate><atom:link href="https://okulusdev.github.io/categories/asm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PutsF: Альтернатива printf для C</title>
+      <link>https://okulusdev.github.io/post/putsf-review/</link>
+      <pubDate>Fri, 03 Nov 2023 19:14:54 +0700</pubDate>
+      
+      <guid>https://okulusdev.github.io/post/putsf-review/</guid>
+      <description>PutsF - альтернатива printf Это небольшая библиотека на ассемблере (компилятор FASM), реализация printf из stdlib, для C
+Установка Эта программа есть в моем гитхаб репозитории
+Код написан для 64 битной linux системы (ELF 64). Если у вас другая, вам придется редактировать код, указывать другой формат, если у вас и разрядность другая - то изменять имена регистров.
+Также у вас должен быть установлен gnu-линковщик, fasm (flat assembly) и система сборки make.</description>
+    </item>
+    
+  </channel>
+</rss>
